@@ -1,0 +1,21 @@
+{
+  "name": "vscode-webview-example",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "dev": "run-p dev:*",
+    "dev:view-vue": "pnpm run -F view-vue watch",
+    "dev:extension": "pnpm run -F extension watch",
+    "clear": "run-s clear:* && rimraf ./node_modules",
+    "clear:view-vue": "pnpm run -F view-vue clear",
+    "clear:extension": "pnpm run -F extension clear"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "npm-run-all": "^4.1.5",
+    "rimraf": "^5.0.5"
+  }
+}
