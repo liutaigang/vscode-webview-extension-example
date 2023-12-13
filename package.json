@@ -5,11 +5,13 @@
   "main": "index.js",
   "scripts": {
     "dev": "run-p dev:*",
-    "dev:view-vue": "pnpm run -F view-vue watch",
     "dev:extension": "pnpm run -F extension watch",
+    "dev:view-vue": "pnpm run -F view-vue watch",
+    "dev:view-react": "pnpm run -F view-react watch",
     "clear": "run-s clear:* && rimraf ./node_modules",
+    "clear:extension": "pnpm run -F extension clear",
     "clear:view-vue": "pnpm run -F view-vue clear",
-    "clear:extension": "pnpm run -F extension clear"
+    "clear:view-react": "pnpm run -F view-react clear"
   },
   "keywords": [],
   "author": "",

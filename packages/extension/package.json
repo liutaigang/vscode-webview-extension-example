@@ -36,6 +36,13 @@
     "typescript": "^5.1.6"
   },
   "contributes": {
+    "commands": [
+      {
+        "command": "panel-view-container.show",
+        "title": "Panel View",
+        "category": "vscode-webview-example"
+      }
+    ],
     "viewsContainers": {
       "activitybar": [
         {

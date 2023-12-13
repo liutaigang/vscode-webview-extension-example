@@ -9,7 +9,8 @@ import { WEBVIEW_PUBLIC_PATH } from './constant'
 
 const app = createApp(App)
 
-app.use(createPinia())
-app.use(router)
-app.provide(WEBVIEW_PUBLIC_PATH, (window as any).__webview_public_path__)
-app.mount('#app')
+app
+  .use(createPinia())
+  .use(router)
+  .provide(WEBVIEW_PUBLIC_PATH, (window as any).__webview_public_path__)
+  .mount('#app')
