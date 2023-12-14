@@ -1,13 +1,10 @@
 <script setup lang="ts">
 import { RouterLink, RouterView } from 'vue-router'
-import HelloWorld from './components/HelloWorld.vue'
-import { inject } from 'vue'
-import { WEBVIEW_PUBLIC_PATH } from './constant';
-import logPath from './assets/logo.svg'
+import HelloWorld from '@/components/HelloWorld.vue'
+import logPath from '@/assets/logo.svg'
+import { useWebviewPublicPath } from '@/hooks/use-webview-public-path'
 
-const publicPath = inject(WEBVIEW_PUBLIC_PATH);
-const logoUrl = publicPath + logPath;
-
+const logoUrl = useWebviewPublicPath(logPath)
 </script>
 
 <template>

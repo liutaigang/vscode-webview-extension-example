@@ -1,11 +1,13 @@
 import * as vscode from 'vscode'
 import { AbstractViewProvider } from './view-provider-abstract'
 
-export class ViewProviderSidebar extends AbstractViewProvider {
-
+export class ViewProviderSidebar
+  extends AbstractViewProvider
+  implements vscode.WebviewViewProvider
+{
   constructor(context: vscode.ExtensionContext) {
     super(context, {
-      appDir: 'out/view-vue',
+      distDir: 'out/view-vue',
       indexPath: 'out/view-vue/index.html'
     })
   }

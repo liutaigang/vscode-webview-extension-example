@@ -5,7 +5,7 @@ export class ViewProviderPanel extends AbstractViewProvider {
 
   constructor(context: vscode.ExtensionContext) {
     super(context, {
-      appDir: 'out/view-react',
+      distDir: 'out/view-react',
       indexPath: 'out/view-react/index.html'
     })
   }
