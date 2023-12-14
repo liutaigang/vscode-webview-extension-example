@@ -207,11 +207,11 @@
 
 接下来，我们会将 view-vue 应用的页面显示在 sidebar 的区域，效果如图：
 
-![](.\documents\assets\vue-view-sidebar-view.png)
+![](https://github.com/liutaigang/vscode-webview-example/tree/main/documents/assets/vue-view-sidebar-view.png)
 
 将 view-react 应用的视图显示在 panel 中，效果如图：
 
-![](.\documents\assets\react-view-panel-view.png)
+![](https://github.com/liutaigang/vscode-webview-example/tree/main/documents/assets/react-view-panel-view.png)
 
 具体的代码实现为：
 
