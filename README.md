@@ -195,7 +195,7 @@
     
     ```json
     build: {
-      outDir: '../extension/out/view-react`
+      outDir: '../extension/out/view-react'
     }
     ```
     
