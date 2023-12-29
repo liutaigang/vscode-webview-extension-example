@@ -1,16 +1,26 @@
 <script setup lang="ts">
+import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import HelloWorld from '@/components/HelloWorld.vue'
 import logPath from '@/assets/logo.svg'
 import { useWebviewPublicPath } from '@/hooks/use-webview-public-path'
+import { useCall } from '@/hooks/cec-client'
+import { useVscThemeKind } from '@/hooks/use-vsc-theme-kind'
 
 const logoUrl = useWebviewPublicPath(logPath)
+const sumResult = ref(0)
+useCall<number>('getSum', 1, 2, 3, 4, 5).then((res) => {
+  sumResult.value = res
+})
+
+const themeKind = useVscThemeKind()
 </script>
 
 <template>
   <header>
     <img alt="Vue logo" class="logo" :src="logoUrl" width="125" height="125" />
-
+    <div>getSum 调用的结果: {{ sumResult }}</div>
+    <div>当前 vscode 的主题类型: {{ themeKind }}</div>
     <div class="wrapper">
       <HelloWorld msg="You did it!" />
       <nav>

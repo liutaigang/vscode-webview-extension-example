@@ -2,10 +2,16 @@ import * as vscode from 'vscode'
 import * as fs from 'fs'
 import * as path from 'path'
 import { modifyHtml } from 'html-modifier'
+import { CallHandler, CecServer, SubscribleHandler } from 'cec-client-server'
 
 export type ViewProviderOptions = {
   distDir: string
   indexPath: string
+}
+
+export type ControllerOptions = {
+  callables: { [name: string]: CallHandler }
+  subscribables: { [name: string]: SubscribleHandler }
 }
 
 export abstract class AbstractViewProvider {
@@ -19,6 +25,7 @@ export abstract class AbstractViewProvider {
    */
   constructor(
     protected context: vscode.ExtensionContext,
+    protected controller: ControllerOptions,
     protected options: ViewProviderOptions
   ) {}
 
