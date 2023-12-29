@@ -21,7 +21,7 @@ pnpm dev
 脚本执行完成后：
 
 - 按 F5 开启调试
-- 点击 activitybar 上的图标： ![](D:\AAAAA\self\vscode-webview-example\documents\assets\activitybar-icon.png)
+- 点击 activitybar 上的图标： ![](https://raw.githubusercontent.com/liutaigang/vscode-webview-extension-example/main/documents/assets/activitybar-icon.png)
 - 键入 `ctrl+shift+p` 在指令输入框中输入：panel-view-container.show
 
 # 特点
