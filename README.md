@@ -1,17 +1,42 @@
 [TOC]
+# 快速开始
 
-# Vscode Webview 使用 Vue 和 React 实现
+```bash
+git clone git@github.com:liutaigang/vscode-webview-example.git
+```
 
-## 特点
+使用 vscode 打开项目，运行：
+
+（如果没有安装 pnpm）
+
+```bash
+npm i pnpm -g
+```
+
+```	bash
+pnpm install
+pnpm dev
+```
+
+脚本执行完成后：
+
+- 按 F5 开启调试
+- 点击 activitybar 上的图标： ![](D:\AAAAA\self\vscode-webview-example\documents\assets\activitybar-icon.png)
+- 键入 `ctrl+shift+p` 在指令输入框中输入：panel-view-container.show
+
+# 特点
 
 - 完整示例：提供 Vue 和 React 的完整示例
 - 解决方案：资源路径、通讯、架构等问题的解决方案一应俱全
 - 文档详细：记录每一个踩过的坑
-- 拿来即用：高度完善、可运行的示例项目
+- 拿来即用：可运行、架构完善、易扩展的示例项目
+
+# 项目创建详情
 
 ## 写在前面的
 
 【vscode 的 webview 开发约束】
+
 - webview 应用运行在 iframe 沙盒模式中，有诸多的约束，如：不能请求数据
 - 资源路径需要动态的计算: webview 应用的资源路径由 vscode 给定
 - 惰性加载几乎不可用：vue 和 react 惰性加载一般不建议使用，不然会比较麻烦 
@@ -254,7 +279,7 @@
    - 一个指令：`panel-view-container.show`
    - 一个 activitybar：`sidebar-view` 以及和 activitybar 关联的 sidebar view
 
-   **注意：** 需要在 activitybar 新增一个图标按钮
+   **注意：** 需要在 activitybar 中的 icon 使用主要自己指定一个合理的
 
 2. 实现 ViewProvider
 
@@ -262,10 +287,10 @@
 
    ```
    ├── service
-    	└── view-provider
-        	├── view-provider-abstract.ts
-        	├── view-provider-panel.ts
-        	└── view-provider-sidebar.ts
+      └── view-provider
+         ├── view-provider-abstract.ts
+         ├── view-provider-panel.ts
+         └── view-provider-sidebar.ts
    ```
 
    **view-provider-abstract.ts** 提供一个抽象的实现，是仿照 `vscode.WebviewViewProvider` 来定义的，其中定义了抽象方法 `resolveWebviewView` 和 实现了对前端应用（如：view-vue, view-react）的的入口文件（如：index.html）的处理。
@@ -333,9 +358,9 @@
    }
    ```
 
-   [html-modifier](https://github.com/liutaigang/html-modifier)： 用于修改、读取 html 脚本的内容，基于：htmlparser2
+   [html-modifier](https://github.com/liutaigang/html-modifier)： 用于修改 html 脚本的内容，基于：htmlparser2
 
-   处理前 index.html 内容如下：
+   处理前 index.html 内容形如：
 
    ```html
    <!DOCTYPE html>
@@ -356,7 +381,7 @@
    </html>
    ```
 
-   处理后 index.html 内容如下：
+   处理后 index.html 内容形如：
 
    ```html
    <html lang="en">
@@ -572,7 +597,7 @@ pnpm dev
 - 点击 activitybar 上的图标
 - 键入 `ctrl+shift+p` 在指令输入框中输入：`panel-view-container.show` 
 
->过程出现任何问题，欢迎提 issues
+>过程出现任何问题，欢迎提 issue
 
 ## 第二步：通讯实现
 
