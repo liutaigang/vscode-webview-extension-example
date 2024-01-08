@@ -1,20 +1,16 @@
-import * as vscode from 'vscode'
+import { ExtensionContext, WebviewView, WebviewViewProvider } from 'vscode'
 import { AbstractViewProvider, ControllerOptions } from './view-provider-abstract'
 import { CecServer } from 'cec-client-server'
-import { Deferred } from '../util/deferred'
 
-export class ViewProviderSidebar
-  extends AbstractViewProvider
-  implements vscode.WebviewViewProvider
-{
-  constructor(context: vscode.ExtensionContext, controller: ControllerOptions) {
+export class ViewProviderSidebar extends AbstractViewProvider implements WebviewViewProvider {
+  constructor(context: ExtensionContext, controller: ControllerOptions) {
     super(context, controller, {
       distDir: 'out/view-vue',
       indexPath: 'out/view-vue/index.html'
     })
   }
 
-  async resolveWebviewView(webviewView: vscode.WebviewView) {
+  async resolveWebviewView(webviewView: WebviewView) {
     const { webview } = webviewView
     webview.options = {
       enableScripts: true,
@@ -25,7 +21,7 @@ export class ViewProviderSidebar
       webview.postMessage.bind(webview),
       webview.onDidReceiveMessage.bind(webview)
     )
-    const { callables, subscribables } = this.controller
+    const { callables, subscribables } = this.controllerOptions
     Object.entries(callables).map((item) => cecServer.onCall(...item))
     Object.entries(subscribables).map((item) => cecServer.onSubscribe(...item))
 

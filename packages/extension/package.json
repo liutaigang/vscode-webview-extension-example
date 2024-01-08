@@ -1,7 +1,7 @@
 {
   "name": "extension",
   "displayName": "extension",
-  "description": "xxxx",
+  "description": "",
   "version": "0.0.1",
   "engines": {
     "vscode": "^1.84.0"
@@ -10,18 +10,21 @@
     "Other"
   ],
   "activationEvents": [],
-  "main": "./out/extension.js",
+  "main": "./out/extension/extension.js",
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
-    "watch": "tsc -watch -p ./",
+    "watch": "pnpm run remove:out && tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "clear": "rimraf ./out && rimraf ./node_modules"
+    "clear": "rimraf ./out && rimraf ./node_modules",
+    "remove:out": "rimraf ./out/extension"
   },
   "dependencies": {
-    "html-modifier": "^1.2.0"
+    "html-modifier": "^1.2.0",
+    "reflect-metadata": "^0.2.1",
+    "tsyringe": "^4.8.0"
   },
   "devDependencies": {
     "@types/mocha": "^10.0.1",

@@ -153,7 +153,7 @@ pnpm dev
 
 > pnpm -F(--filter) 用于指定 pnpm 要使用的 package, -F(--filter) 后的为包名
 
-### 新建 view-vue 应用
+### 新建 Vue 应用
 
 1. 创建应用 view-vue
     在 packages 目录下，执行：

@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "run-p dev:*",
+    "dev": "run-p dev:view-*",
     "dev:extension": "pnpm run -F extension watch",
     "dev:view-vue": "pnpm run -F view-vue watch",
     "dev:view-react": "pnpm run -F view-react watch",
@@ -17,7 +17,8 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "cec-client-server": "^1.1.1",
+    "axios": "^1.6.4",
+    "cec-client-server": "^1.2.1",
     "path-browserify": "^1.0.1"
   },
   "devDependencies": {

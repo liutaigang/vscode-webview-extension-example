@@ -1,26 +1,28 @@
-import * as vscode from 'vscode'
+import 'reflect-metadata'
+import './service/registry/services-registry'
+import { ExtensionContext, ViewColumn, commands, window } from 'vscode'
 import { ViewProviderSidebar } from './view-provider/view-provider-sidebar'
 import { ViewProviderPanel } from './view-provider/view-provider-panel'
-import { callables } from './controller/callables'
-import { subscribables } from './controller/subscribables'
+import { getControllers } from './controller/registry/controllers-registry'
 
-export function activate(context: vscode.ExtensionContext) {
+export function activate(context: ExtensionContext) {
+  const { callables, subscribables } = getControllers()
   // sibebar view 实例化
   const viewProvidersidebar = new ViewProviderSidebar(context, { callables, subscribables })
   // 在 views（ sidebar-view-container 已在 package.json 的 contributes 中声明）中注册
-  const sidebarViewDisposable = vscode.window.registerWebviewViewProvider(
+  const sidebarViewDisposable = window.registerWebviewViewProvider(
     'sidebar-view-container',
     viewProvidersidebar,
     { webviewOptions: { retainContextWhenHidden: true } }
   )
 
   // 为指令 panel-view-container.show 注册行为
-  const panelViewDisposable = vscode.commands.registerCommand('panel-view-container.show', () => {
+  const panelViewDisposable = commands.registerCommand('panel-view-container.show', () => {
     const viewProviderPanel = new ViewProviderPanel(context, { callables, subscribables })
-    const panel = vscode.window.createWebviewPanel(
+    const panel = window.createWebviewPanel(
       'panel-view-container',
       'Panel View',
-      vscode.ViewColumn.One,
+      ViewColumn.One,
       {}
     )
     viewProviderPanel.resolveWebviewView(panel)
