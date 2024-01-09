@@ -1,5 +1,5 @@
 import { workspace } from 'vscode'
-import { controller, callable, subscribable } from '../decorator'
+import { controller, callable, subscribable } from 'cec-client-server/decorator'
 
 @controller('VscTheme')
 export class VscThemeControler {

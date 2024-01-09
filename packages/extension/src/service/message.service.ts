@@ -1,4 +1,4 @@
-import { service } from '../decorator'
+import { service } from 'cec-client-server/decorator'
 
 export interface MessageSubject {
   register(subjectMame: string, observer: (message: any) => void): void

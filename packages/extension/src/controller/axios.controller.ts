@@ -1,5 +1,5 @@
 import { AxiosRequestConfig } from 'axios'
-import { callable, controller } from '../decorator'
+import { callable, controller } from 'cec-client-server/decorator'
 import { AxiosService } from '../service/axios.service'
 
 @controller('Axios')

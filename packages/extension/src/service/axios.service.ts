@@ -1,4 +1,4 @@
-import { service } from '../decorator'
+import { service } from 'cec-client-server/decorator'
 import axios, {
   AxiosInstance,
   AxiosRequestConfig,

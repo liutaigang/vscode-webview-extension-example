@@ -1,5 +1,4 @@
-import { inject } from 'tsyringe'
-import { callable, controller, subscribable } from '../decorator'
+import { callable, controller, subscribable, inject } from 'cec-client-server/decorator'
 import { MessageSubject } from '../service/message.service'
 
 @controller('Message')

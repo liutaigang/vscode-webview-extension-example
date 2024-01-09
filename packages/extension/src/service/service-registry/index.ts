@@ -1,6 +1,5 @@
-import { InjectionToken, container } from 'tsyringe'
-import { AxiosService } from '../axios.service'
 import { MessageService } from '../message.service'
+import { registerServices } from 'cec-client-server/decorator'
 
 /**
  * 注意：服务（Service）不一定需要在注册!!!
@@ -38,6 +37,4 @@ import { MessageService } from '../message.service'
  *   ...
  * }
  */
-const servicesRegistry: InjectionToken<any>[] = [MessageService]
-
-servicesRegistry.forEach(container.resolve.bind(container))
+registerServices([MessageService])

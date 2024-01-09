@@ -1,9 +1,10 @@
 import 'reflect-metadata'
-import './service/registry/services-registry'
+import './service/service-registry'
+import './controller/contoller-registry';
 import { ExtensionContext, ViewColumn, commands, window } from 'vscode'
 import { ViewProviderSidebar } from './view-provider/view-provider-sidebar'
 import { ViewProviderPanel } from './view-provider/view-provider-panel'
-import { getControllers } from './controller/registry/controllers-registry'
+import { getControllers } from 'cec-client-server/decorator';
 
 export function activate(context: ExtensionContext) {
   const { callables, subscribables } = getControllers()
