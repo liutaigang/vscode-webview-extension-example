@@ -1,4 +1,4 @@
-import { ref } from 'vue'
+import { ref, onUnmounted} from 'vue'
 import { useCall, useSubscrible } from './use-cec-client'
 
 export const vscColorThemeOptions = [
@@ -45,9 +45,11 @@ export function useVscColorTheme() {
   useCall<string>('VscTheme.getTheme').then((theme) => {
     colorTheme.value = theme
   })
-  useSubscrible('VscTheme.getTheme', (theme: string) => {
+
+  const dispose = useSubscrible('VscTheme.getTheme', (theme: string) => {
     colorTheme.value = theme
   })
+  onUnmounted(dispose)
 
   const setColorTheme = (colorTheme: string) => {
     useCall('VscTheme.updateTheme', colorTheme)

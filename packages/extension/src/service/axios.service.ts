@@ -40,38 +40,38 @@ export class AxiosService
 
   get<T = any, R = AxiosResponse<T, any>, D = any>(
     url: string,
-    config?: AxiosRequestConfig<D> | undefined
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.axiosInstance.get(url, config)
   }
 
   post<T = any, R = AxiosResponse<T, any>, D = any>(
     url: string,
-    data?: D | undefined,
-    config?: AxiosRequestConfig<D> | undefined
+    data?: D,
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.axiosInstance.post(url, data, config)
   }
 
   put<T = any, R = AxiosResponse<T, any>, D = any>(
     url: string,
-    data?: D | undefined,
-    config?: AxiosRequestConfig<D> | undefined
+    data?: D,
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.axiosInstance.post(url, data, config)
   }
 
   delete<T = any, R = AxiosResponse<T, any>, D = any>(
     url: string,
-    config?: AxiosRequestConfig<D> | undefined
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.axiosInstance.post(url, config)
   }
 
   patch<T = any, R = AxiosResponse<T, any>, D = any>(
     url: string,
-    data?: D | undefined,
-    config?: AxiosRequestConfig<D> | undefined
+    data?: D,
+    config?: AxiosRequestConfig<D>
   ): Promise<R> {
     return this.axiosInstance.post(url, data, config)
   }

@@ -2,7 +2,7 @@ import { ExtensionContext, Uri, Webview, WebviewPanel, WebviewView } from 'vscod
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import { modifyHtml } from 'html-modifier'
-import { CallHandler, SubscribleHandler } from 'cec-client-server'
+import { CallHandler, CecServer, SubscribleHandler } from 'cec-client-server'
 
 export type ViewProviderOptions = {
   distDir: string
@@ -35,6 +35,20 @@ export abstract class AbstractViewProvider {
    * @param webviewView 可以为 vscode.WebviewView 或者 vscode.WebviewPanel 的实例
    */
   abstract resolveWebviewView(webviewView: WebviewView | WebviewPanel): void
+
+  /**
+   * 新增一个 CecServer 实例，并设置相关的 callable 和 subscribable
+   * @param webviewView 可以为 vscode.WebviewView 或者 vscode.WebviewPanel 的实例
+   */
+  protected setControllers(webview: Webview) {
+    const cecServer = new CecServer(
+      webview.postMessage.bind(webview),
+      webview.onDidReceiveMessage.bind(webview)
+    )
+    const { callables, subscribables } = this.controllerOptions
+    Object.entries(callables).map((item) => cecServer.onCall(...item))
+    Object.entries(subscribables).map((item) => cecServer.onSubscribe(...item))
+  }
 
   /**
    * 处理前端应用 index.html 文件的方法

@@ -16,15 +16,7 @@ export class ViewProviderSidebar extends AbstractViewProvider implements Webview
       enableScripts: true,
       localResourceRoots: [this.context.extensionUri]
     }
-
-    const cecServer = new CecServer(
-      webview.postMessage.bind(webview),
-      webview.onDidReceiveMessage.bind(webview)
-    )
-    const { callables, subscribables } = this.controllerOptions
-    Object.entries(callables).map((item) => cecServer.onCall(...item))
-    Object.entries(subscribables).map((item) => cecServer.onSubscribe(...item))
-
+    this.setControllers(webview)
     webview.html = await this.getWebviewHtml(webview)
   }
 }

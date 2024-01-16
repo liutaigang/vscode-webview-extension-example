@@ -1,6 +1,5 @@
 import { ExtensionContext, WebviewPanel } from 'vscode'
 import { AbstractViewProvider, ControllerOptions } from './view-provider-abstract'
-import { CecServer } from 'cec-client-server'
 
 export class ViewProviderPanel extends AbstractViewProvider {
   constructor(context: ExtensionContext, controller: ControllerOptions) {
@@ -16,15 +15,7 @@ export class ViewProviderPanel extends AbstractViewProvider {
       enableScripts: true,
       localResourceRoots: [this.context.extensionUri]
     }
-
-    const cecServer = new CecServer(
-      webview.postMessage.bind(webview),
-      webview.onDidReceiveMessage.bind(webview)
-    )
-    const { callables, subscribables } = this.controllerOptions
-    Object.entries(callables).map((item) => cecServer.onCall(...item))
-    Object.entries(subscribables).map((item) => cecServer.onSubscribe(...item))
-
+    this.setControllers(webview)
     webview.html = await this.getWebviewHtml(webview)
   }
 }
