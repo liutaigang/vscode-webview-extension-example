@@ -1,5 +1,9 @@
 [TOC]
-# 快速开始
+# 简介
+
+Vscode 的 webview 开发示例，提供 Vue 和 React 实现，文档详细。
+
+# 运行
 
 ```bash
 git clone git@github.com:liutaigang/vscode-webview-example.git
@@ -29,9 +33,9 @@ pnpm dev
 - 完整示例：提供 Vue 和 React 的完整示例
 - 解决方案：资源路径、通讯、架构等问题的解决方案一应俱全
 - 文档详细：记录每一个踩过的坑
-- 拿来即用：可运行、架构完善、易扩展的示例项目
+- 拿来即用：可运行、架构完善、易扩展、生产级的示例项目
 
-# 项目创建详情
+# 项目详情
 
 ## 写在前面的
 
@@ -71,7 +75,7 @@ pnpm dev
    ├── pnpm-workspace.yaml
    └── README.md
    ```
-### 新建 extension 应用
+### 新建 extension  端应用
 1. 在 packages 目录下使用 yo 创建 extension 应用
 
    ```bash
@@ -153,7 +157,9 @@ pnpm dev
 
 > pnpm -F(--filter) 用于指定 pnpm 要使用的 package, -F(--filter) 后的为包名
 
-### 新建 Vue 应用
+### 新建 webview 端应用:
+
+#### Vue 框架
 
 1. 创建应用 view-vue
     在 packages 目录下，执行：
@@ -191,7 +197,7 @@ pnpm dev
 
      将打包的目录指向 extension 的 out/view-vue 目录
 
-### 新建 React 应用
+#### React 框架
 
 1. 创建应用 view-react
     在 packages 目录下，执行：
@@ -599,6 +605,465 @@ pnpm dev
 
 >过程出现任何问题，欢迎提 issue
 
-## 第二步：通讯实现
+## 第二步：通信实现
+
+### 使用的通信框架库 cec-client-server
+
+这里的通讯主要指的是 extension 端和 webview 端的通信。
+
+本项目中，我们不是直接使用 [vscode webview 提供的通讯 API](https://code.visualstudio.com/api/extension-guides/webview#scripts-and-message-passing) 进行两端的信息交换，而是使用 [cec-client-server](https://github.com/liutaigang/cross-end-call) ，这个库主要的作用是：可以将端与端之间`消息的发送和接收`，转换为`方法调用`和`主题订阅`。这样说得有点抽象，以`方法调用`为例，我们来一个伪代码的演示：
+
+有这样一个需求：
+
+- webview 端向 extension 端请求 vscode 的主题色
+- extension 端调用 api 获取后，返回给 webview 端，失败则返回失败信息
+
+**传统的方式：**
+
+```js
+// webview 端
+const vscodeApi = window.acquireVsCodeApi()
+vscodeApi.postMessage('getTheme')
+window.addEventListener("message", ({ data }) => {
+  if(data.type === 'returnTheme') {
+  	if (data.state === 'success') {
+	  console.log(data.value)
+  	} else {
+  	  console.log(data.error)
+  	}
+  }
+})
+
+// extension 端
+webview.onDidReceiveMessage((method) => {
+  if(method === "getTheme") {
+     ...
+     try {
+       cosnt theme = getTheme()
+       webview.postMessage({ type: 'returnTheme', value: theme, state: 'success' })
+     } catch(error) {
+       webview.postMessage({ type: 'returnTheme', error, state: 'failed' })
+     }
+  }
+})
+```
+
+**使用 cec-client-server ：**
+
+```js
+// extension 端
+import { CecServer } from "cec-client-server";
+const cecServer = new CecServer(webview.postMessage, webview.onDidReceiveMessage);
+cecServer.onCall('getTheme', () => {
+  ...
+  return getTheme();
+})
+
+// webview 端
+import { CecClient } from "cec-client-server";
+const vscodeApi = window.acquireVsCodeApi();
+const cecClient = new CecClient(vscodeApi.postMessage, window.addEventListener);
+cecClient.call('getTheme')
+  .then((theme) => console.log(theme))
+  .catch((error) => console.log(theme));  
+```
+
+使用的 cec-client-server 之后，整个信息交换的过程变得清晰了很多。
+
+**更重要的意义在于：信息的交换的主导方，从 webview 端变成了 extension 端**，如上例，在传统的方式中，信息的类型需要 webview 端告知 extension 端，信息如何处理，需要双方的约定；使用 cec-client-server；extension 端只需要定义一个可以调用的"方法"，webview 端需要调用，按照定义好的方式即可，不需要和 extension 端做任何约定。这样方式大大减少了两端的耦合。
+
+cec-client-server 还能实现主题的订阅，即：extension 端可以实现一个主题（subject），webview 端实现一个对应的观察者（observer ），处理主题的状态变化，熟悉 rxjs 的话应该会很容易上手。cec-client-server 地址：https://github.com/liutaigang/cross-end-call
+
+### Extension 端应用的通信实现
+
+首先，我们需要明确一下 cec-client-server 的几个概念：
+
+- callable —— 指可以被调用的方法
+- subscribable —— 指可以被订阅的主题
+- controller —— callable 和 subscribable 的统称
+- service —— 可以理解为 controller 的 “服务者”
+
+我们还需要用到 cec-client-server 的**装饰器**模块， 即：cec-client-server/decorator。下面，我们定义一个 controller ： 
+
+在 extension/src 中新增 controller 目录，在 controller 下新增如下：
+
+```
+.
+├── extension 
+    ├── src
+        ├── controller
+            ├── controller-registry
+            │	└── index.ts
+            ├── vsc-theme.controller.ts
+```
+
+**vsc-theme.controller.ts** 中定义一个 定义用于 vscode 的主题色获取和修改的 callable 和 subscribable：
+
+```TS
+import { workspace } from 'vscode'
+import { controller, callable, subscribable } from 'cec-client-server/decorator'
+
+/**
+ * @controller('VscTheme') 装饰器的作用有：
+ * - 自动实例化 VscThemeControler 类，在使用的地方以单例的方式提供。在代码中一般不直接实例化 controller！
+ * - 将 VscThemeControler 类的实例化dui'xi'g 注册一个名为 'VscTheme' 的 controller
+ *
+ * controller 的命名规则：
+ * - 别名（alias）：如 @controller('VscTheme') 的就是使用别名 'VscTheme' 来注册 controller
+ * - 使用类名：如 @controller() 的就是使用类名 VscThemeController 来注册 controller。
+ *	 因为 controller 的类名一般都以 Controller 作为后缀，为了命名简单，一般都使用别名
+ */
+@controller('VscTheme')
+export class VscThemeControler {
+  constructor() {}
+
+  /**
+   * @callable('getTheme') 装饰器的作用有：
+   * - 将方法 getThemeForCall 以别名 getTheme 注册为一个 callable
+   * - 最终这个可调用方法的名称为：VscTheme.getTheme，规则为：[controllerName].[callableName]
+   *
+   * callable 的命名规则：
+   * - 有别名的话，使用别名，没有别名，使用方法名来注册 callable。所以不能使用 Symbol 来声明方法！
+   * - callable 和 subscribable 可以重名，但是和 callable 和 callable 禁止重名！
+   */
+  @callable('getTheme') // 这里使用了别名
+  async getThemeForCall() {
+    const colorTheme = workspace.getConfiguration().get('workbench.colorTheme')
+    return colorTheme
+  }
+
+  /**
+   * @subscribable('getTheme') 装饰器的作用有：
+   * - 将“主题” getThemeForSubscribe 以别名 getTheme 注册为一个 subscribable
+   * - 最终这个订阅这个“主题”的名称为：VscTheme.getTheme
+   *
+   * subscribable 的命名规则：和 callable 的相同
+   */
+  @subscribable('getTheme')
+  getThemeForSubscribe(next: (value: any) => void) {
+    const disposable = workspace.onDidChangeConfiguration(() => {
+      const colorTheme = workspace.getConfiguration().get('workbench.colorTheme')
+      next(colorTheme)
+    })
+    return disposable.dispose.bind(disposable)
+  }
+
+  @callable() // 不使用别名时，callable 的名称就是方法名：updateTheme 本身，所以最终这个可调用方法的名称为：VscTheme.updateTheme
+  updateTheme(colorTheme: string) {
+    workspace.getConfiguration().update('workbench.colorTheme', colorTheme)
+  }
+}
+```
+
+在 **controller-registry/index.ts** 中将定义好的 controller 进行注册：
+
+```TS
+import { registerControllers } from 'cec-client-server/decorator'
+import { VscThemeControler } from '../vsc-theme.controller'
+
+registerControllers([VscThemeControler])
+```
+
+最后，需要在 extension.ts 中打出执行，并在实例化 view-provider 时使用：
+
+```ts
+import 'reflect-metadata'
+import './controller/contoller-registry'; // 直接执行
+import { ExtensionContext, window } from 'vscode'
+import { ViewProviderSidebar } from './view-provider/view-provider-sidebar'
+import { getControllers } from 'cec-client-server/decorator'; // 导出 getControllers 方法
+
+export function activate(context: ExtensionContext) {
+  const { callables, subscribables } = getControllers() // getControllers 能获取使用 @controller, @callable, @subscribable 装饰的所有能力和主题
+  const viewProvidersidebar = new ViewProviderSidebar(context, { callables, subscribables })
+  const sidebarViewDisposable = window.registerWebviewViewProvider(
+    'sidebar-view-container',
+    viewProvidersidebar,
+  )
+  context.subscriptions.push(sidebarViewDisposable)
+}
+
+export function deactivate() {}
+```
+
+相应的，需要在 view-provider 中实现通讯相关逻辑，核心代码为：
+
+```ts
+import { CecServer } from 'cec-client-server'
+/**
+  * 新增一个 CecServer 实例，并设置相关的 callable 和 subscribable
+ * @param webviewView 可以为 vscode.WebviewView 或者 vscode.WebviewPanel 的实例
+ */
+protected setControllers(webview: Webview) {
+  const cecServer = new CecServer(
+    webview.postMessage.bind(webview),
+    webview.onDidReceiveMessage.bind(webview)
+  )
+  const { callables, subscribables } = this.controllerOptions
+  Object.entries(callables).map((item) => cecServer.onCall(...item))
+  Object.entries(subscribables).map((item) => cecServer.onSubscribe(...item))
+}
+```
+
+源码路径：https://github.com/liutaigang/vscode-webview-extension-example/blob/main/packages/extension/src/view-provider/view-provider-abstract.ts
+
+**注意：**
+
+因为 cec-client-server/decorator 使用了 [tsyringe](https://github.com/microsoft/tsyringe) ，所以需要在 tsconfig.json 中设置：
+
+```json
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true
+  }
+}
+```
+
+还需要增加一个 Reflect API 的 polyfill，可选的有：
+
+- [reflect-metadata](https://www.npmjs.com/package/reflect-metadata)
+- [core-js (core-js/es7/reflect)](https://www.npmjs.com/package/core-js)
+- [reflection](https://www.npmjs.com/package/@abraham/reflection)
+
+最后在 extension.ts 中导入：
+
+```ts
+// extension.ts
+import "reflect-metadata"; // 在所有代码之前
+
+// Your code here...
+```
+
+### Webview  端通讯实现：以 Vue 为例
+
+承接 extension 端应用的通信实现例子，我们在 Vue 应用中实现对应的逻辑。
+
+在 view-vue 中的 src/hooks 目录中新增以下文件：
+
+```
+.
+├── view-vue 
+    ├── src
+        ├── hooks
+            ├── use-cec-client.ts
+            ├── use-vsc-color-theme.ts
+```
+
+**[use-cec-client.ts](https://github.com/liutaigang/vscode-webview-extension-example/blob/main/packages/view-vue/src/hooks/use-cec-client.ts)** 是与 extensoin 端建立连接的一个 hook，其逻辑为：
+
+```ts
+import { CecClient, type MsgObserver } from 'cec-client-server'
+
+// acquireVsCodeApi 是 extension 的 webview 在 iframe 中注入的一个方法，用于像 webview 发送信息等
+const vscodeApi = (window as any).acquireVsCodeApi()
+
+// 实例化 CecClient
+const msgSender: MsgSender = vscodeApi.postMessage.bind(vscodeApi)
+const msgReceiver: MsgReceiver = (msgHandler) => {
+  window.addEventListener('message', (evt) => msgHandler(evt.data))
+}
+const cecClient = new CecClient(msgSender, msgReceiver)
+
+// useCecClient， 暴露 CecClient 实例
+export const useCecClient = () => cecClient
+
+//  暴露 CecClient 实例的 call 方法
+export const useCall = <ReplyVal>(name: string, ...args: any[]) => {
+  return cecClient.call<ReplyVal>(name, ...args)
+}
+
+//  暴露 CecClient 实例的 subscrible 方法
+export const useSubscrible = (name: string, observer: MsgObserver, ...args: any[]) => {
+  return cecClient.subscrible(name, observer, ...args)
+}
+```
+
+源码地址：https://github.com/liutaigang/vscode-webview-extension-example/blob/main/packages/view-vue/src/hooks/use-cec-client.ts
+
+**[use-vsc-color-theme.ts](https://github.com/liutaigang/vscode-webview-extension-example/blob/main/packages/view-vue/src/hooks/use-vsc-color-theme.ts)** 是进行主题的修改和订阅的一个 hook
+
+```ts
+import { ref, onUnmounted } from 'vue'
+import { useCall, useSubscrible } from './use-cec-client'
+
+export const vscColorThemeOptions = [
+  {
+    label: 'Light (Visual Studio)',
+    value: 'Visual Studio Light'
+  },
+  {
+    label: 'Dark (Visual Studio)',
+    value: 'Visual Studio Dark'
+  },
+  ...
+]
+
+export function useVscColorTheme() {
+  const colorTheme = ref<string>()
+  
+  // 确保能立即获取到当前的主题色
+  useCall<string>('VscTheme.getTheme').then((theme) => {
+    colorTheme.value = theme
+  })
+  
+  // 订阅主题色变化
+  const dispose = useSubscrible('VscTheme.getTheme', (theme: string) => {
+    colorTheme.value = theme
+  })
+  onUnmounted(dispose)
+
+  // 更新主题色
+  const setColorTheme = (colorTheme: string) => {
+    useCall('VscTheme.updateTheme', colorTheme)
+  }
+
+  // 暴露当前主题色的 ref 变量，和更新的方法
+  return { colorTheme, setColorTheme }
+}
+
+```
+
+源码地址：https://github.com/liutaigang/vscode-webview-extension-example/blob/main/packages/view-vue/src/hooks/use-vsc-color-theme.ts
+
+最后，我们就可以在视图组件中使用了，如：
+
+```vue
+<script setup lang="ts">
+import { useVscColorTheme, vscColorThemeOptions } from '@/hooks/use-vsc-color-theme'
+
+// Vscode 主题监听和设置示例
+const { colorTheme, setColorTheme } = useVscColorTheme()
+const onColortThemeInput = () => {
+  setTimeout(() => setColorTheme(colorTheme.value!))
+}
+</script>
+
+<template>
+  <header>
+    <div class="example-block">
+      <h2>主题获取、监听和设置演示</h2>
+      <label for="color-theme-select">请选择 Vscode 的主题:</label>
+      <select id="color-theme-select" v-model="colorTheme" @input="onColortThemeInput()">
+        <option v-for="{ value, label } of vscColorThemeOptions" :key="value" :value="value">
+          {{ label }}
+        </option>
+      </select>
+      <div>当前窗口 vscode 的主题类型: {{ colorTheme }}</div>
+    </div>
+  </header>
+  <RouterView />
+</template>
+```
+
+源码地址：https://github.com/liutaigang/vscode-webview-extension-example/blob/main/packages/view-vue/src/App.vue
+
+### 其他示例：后端接口请求
+
+**因为 Vscode 的 webview 实质上是一个 iframe，其 src 的指向的是本地资源，且使用了 sandbox 的 allow-same-origin 属性，这意味着 webview 端的应用中发起的接口请求可能会受到“同源策略”的限制**，如图：
+
+<img src="D:\AAAAA\self\vscode-webview-example\documents\assets\iframe-crosss-domain.png" />
+
+所以，我们一般在 extension 端发起接口请求，然后通过通信来传递请求数据给 webview 端。下面，通过一个示例来具体看看。
+
+在 extension 端应用中，**新建 Axios 的服务（service）、控制器（controller）**：
+
+```
+.
+├── extension 
+    ├── src
+        ├── controller
+        │   ├── aixos.controller.ts
+        ...
+        ├── service
+          	├── axios.service.ts
+```
+
+**axios.service.ts**： 该服务的作用是实现 axios 请求的所有逻辑，包括但不限于：参数配置、数据处理、拦截器等。
+
+```ts
+import { service } from 'cec-client-server/decorator'
+import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse, CreateAxiosDefaults, InternalAxiosRequestConfig } from 'axios'
+
+@service()
+export class AxiosService implements Pick<AxiosInstance, 'get' | 'post' | 'put' | 'delete' | 'patch'> {
+  private axiosInstance: AxiosInstance
+  private createAxiosDefaults: CreateAxiosDefaults = {}
+  private requestInterceptor = {
+    onFulfilled: (config: InternalAxiosRequestConfig) => { return config },
+    onRejected: (error: any) => { return Promise.reject(error) }
+  }
+  private responseInterceptor = {
+    onFulfilled: (config: AxiosResponse) => { return config },
+    onRejected: (error: any) => { return Promise.reject(error) }
+  }
+
+  constructor() {
+    this.axiosInstance = axios.create(this.createAxiosDefaults)
+    const { onFulfilled, onRejected } = this.requestInterceptor
+    this.axiosInstance.interceptors.request.use(onFulfilled, onRejected)
+    const { onFulfilled: onFulfilled01, onRejected: onRejected01 } = this.responseInterceptor
+    this.axiosInstance.interceptors.response.use(onFulfilled01, onRejected01)
+  }
+
+  get<T = any, R = AxiosResponse<T, any>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R> {
+    return this.axiosInstance.get(url, config)
+  }
+
+  post<T = any, R = AxiosResponse<T, any>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R> {
+    return this.axiosInstance.post(url, data, config)
+  }
+
+  put<T = any, R = AxiosResponse<T, any>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R> {
+    return this.axiosInstance.post(url, data, config)
+  }
+
+  delete<T = any, R = AxiosResponse<T, any>, D = any>(url: string, config?: AxiosRequestConfig<D>): Promise<R> {
+    return this.axiosInstance.post(url, config)
+  }
+
+  patch<T = any, R = AxiosResponse<T, any>, D = any>(url: string, data?: D, config?: AxiosRequestConfig<D>): Promise<R> {
+    return this.axiosInstance.post(url, data, config)
+  }
+}
+```
+
+该服务使用了 `cec-client-server/decorator` 的 `service` 装饰器，该装饰器的作用是将被装饰的类，以单例的形式供 controller 使用。
+
+**axios.controller.ts**： 使用了 AxiosService 服务，主要作用是暴露 AxiosService 的能力：
+
+```ts
+import { AxiosRequestConfig } from 'axios'
+import { callable, controller } from 'cec-client-server/decorator'
+import { AxiosService } from '../service/axios.service'
+
+@controller('Axios')
+export class AxiosControler {
+  // AxiosService 不需要实例化，因为其使用 @service, cec-client-server/decorator 模块会自动实例化，并赋值给 axiosService 属性
+  constructor(private axiosService: AxiosService) {}
+
+  @callable()
+  get(url: string, config?: AxiosRequestConfig): Promise<any> {
+    return this.axiosService.get(url, config)
+  }
+
+  @callable()
+  post(url: string, data?: any, config?: AxiosRequestConfig): Promise<any> {
+    return this.axiosService.post(url, data, config)
+  }
+
+  @callable()
+  put(url: string, data?: any, config?: AxiosRequestConfig): Promise<any> {
+    return this.axiosService.put(url, data, config)
+  }
+
+  @callable()
+  delete(url: string, config?: AxiosRequestConfig): Promise<any> {
+    return this.axiosService.delete(url, config)
+  }
+}
+```
+
+最后，在 webview 端的应用使用的示例代码：
 
 ## 第三步：完善 extension 架构
