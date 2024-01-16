@@ -14,12 +14,12 @@
   "scripts": {
     "vscode:prepublish": "pnpm run compile",
     "compile": "tsc -p ./",
-    "watch": "pnpm run remove:out && tsc -watch -p ./",
+    "watch": "pnpm run clear:out && tsc -watch -p ./",
     "pretest": "pnpm run compile && pnpm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
     "clear": "rimraf ./out && rimraf ./node_modules",
-    "remove:out": "rimraf ./out/extension"
+    "clear:out": "rimraf ./out/extension"
   },
   "dependencies": {
     "html-modifier": "^1.2.0",
