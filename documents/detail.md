@@ -545,7 +545,7 @@
    
    ```ts
    import { useState } from 'react'
-   import { join } from 'path-browserify' // 下载：pnpm i -w html-modifier
+   import { join } from 'path-browserify' // 下载：pnpm i -w path-browserify
    
    const webviewPublicPath = ((window as any).__webview_public_path__ as string) ?? ''
    export function useWebviewPublicPath(relativePath: string) {
@@ -827,7 +827,11 @@ protected setControllers(webview: Webview) {
 - [core-js (core-js/es7/reflect)](https://www.npmjs.com/package/core-js)
 - [reflection](https://www.npmjs.com/package/@abraham/reflection)
 
-以 reflect-metadata 为例，下载： pnpm i -F extension reflect-metadata
+以 reflect-metadata 为例，下载： 
+
+```
+pnpm i -F extension reflect-metadata
+```
 
 最后在 extension.ts 中导入：
 
@@ -878,8 +882,6 @@ export const useSubscrible = (name: string, observer: MsgObserver, ...args: any[
   return cecClient.subscrible(name, observer, ...args)
 }
 ```
-
-源码地址：https://github.com/liutaigang/vscode-webview-extension-example/blob/main/packages/view-vue/src/hooks/use-cec-client.ts
 
 **[use-vsc-color-theme.ts](https://github.com/liutaigang/vscode-webview-extension-example/blob/main/packages/view-vue/src/hooks/use-vsc-color-theme.ts)** 是进行主题的修改和订阅的一个 hook，其逻辑为：
 
@@ -1083,7 +1085,7 @@ extension 端和 webview 端需要保持单向的依赖关系，即 **webview �
 
 <img src="https://raw.githubusercontent.com/liutaigang/vscode-webview-extension-example/main/documents/assets/dependency.png" style="zoom:75%;" />
 
-> 什么是依赖：
+> 什么是依赖？
 >
 > - 一段代码中，直接体现是：在 A 的代码中，使用了 B 的代码，则 A 依赖于 B，不管有没有显示的声明。
 > - 一个应用中，直接体现是：在 A 组件使用 B 组件（B 服务，B 方法， B 库），则 A 依赖于 B，不管有没有显示的声明。
