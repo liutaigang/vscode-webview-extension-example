@@ -177,7 +177,7 @@
     }
     ```
 
-  > 这里，run-p 使用的是 npm-run-all 的命令，需要使用 `pnpn i npm-run-all -w` 下载，`run-p dev:*` 可以并行的调用 `dev:` 开头的脚本
+  > 这里，run-p 使用的是 npm-run-all 的命令，需要使用 `pnpn i npm-run-all -w` 下载，`run-p dev:view-*` 可以并行的调用 `dev:view-` 开头的脚本
 
 > pnpm -F(--filter) 用于指定 pnpm 要使用的 package, -F(--filter) 后的为包名
 
