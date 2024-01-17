@@ -325,11 +325,11 @@
 
    ```
    extension
-   	└── src
-          └── view-provider
-             ├── view-provider-abstract.ts
-             ├── view-provider-panel.ts
-             └── view-provider-sidebar.ts
+         └── src
+               └── view-provider
+               ├── view-provider-abstract.ts
+               ├── view-provider-panel.ts
+               └── view-provider-sidebar.ts
    ```
 
    **[view-provider-abstract.ts](https://github.com/liutaigang/vscode-webview-example/blob/main/packages/extension/src/view-provider/view-provider-abstract.ts)** 提供一个抽象的实现，是仿照 `vscode.WebviewViewProvider` 来定义的，其中定义了抽象方法 `resolveWebviewView` 和 实现了对前端应用（如：view-vue, view-react）的的入口文件（如：index.html）的处理。
