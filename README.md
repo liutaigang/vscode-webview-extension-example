@@ -29,12 +29,15 @@ pnpm dev
 
 # 插件
 
-该项目已发布为 vscode 插件，可通过。。。 获取
+该项目已发布为 vscode 插件，可搜索 vscode-webview-extension-example 获取
 
 # 特点
 
 - 完整示例：提供 Vue 和 React 的完整示例
 - 解决方案：资源路径、通讯、架构等问题的解决方案一应俱全
 - 拿来即用：可运行、架构完善、易扩展、生产级的示例项目
-- 文档详细：记录每一个踩过的坑——
+- 文档详细：记录每一个踩过的坑
+
+# 详细文档
+手把手教你创建这个示例：[https://github.com/liutaigang/vscode-webview-extension-example/blob/main/documents/detail.md](https://github.com/liutaigang/vscode-webview-extension-example/blob/main/documents/detail.md)
 
