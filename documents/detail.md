@@ -124,6 +124,16 @@
      }
      ```
 
+     对应将的 extension 目录中的 tsconfig.json 的 compilerOptions.outDir 设置为：
+     
+     ```json
+     {
+         "compilerOptions": {
+              "outDir": "out/extension",
+         }
+     }
+     ```
+
      将 .vscode 目录中的 tasks.json 的内容做如下的修改：
 
      ```json
@@ -147,7 +157,7 @@
      }
      ```
 
-3. 新增 watch 脚本
+4. 新增 watch 脚本
     在 extension 中的 package.json 中新增 script：
 
     ```json
