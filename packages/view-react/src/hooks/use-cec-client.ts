@@ -5,8 +5,6 @@ const cecClient = new CecClient(vscodeApi.postMessage.bind(vscodeApi), (msgHandl
   window.addEventListener('message', (evt) => msgHandler(evt.data))
 })
 
-export const useCecClient = () => cecClient
-
 export const useCall = <ReplyVal>(name: string, ...args: any[]) => {
   return cecClient.call<ReplyVal>(name, ...args)
 }

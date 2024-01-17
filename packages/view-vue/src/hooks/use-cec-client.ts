@@ -8,8 +8,6 @@ const msgReceiver: MsgReceiver = (msgHandler) => {
 }
 const cecClient = new CecClient(msgSender, msgReceiver)
 
-export const useCecClient = () => cecClient
-
 export const useCall = <ReplyVal>(name: string, ...args: any[]) => {
   return cecClient.call<ReplyVal>(name, ...args)
 }
