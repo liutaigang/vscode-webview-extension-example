@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "module": "commonjs",
+    "moduleResolution":"node",
     "target": "ES2020",
     "outDir": "out/extension",
     "lib": ["ES2020"],
@@ -12,7 +12,10 @@
     "noFallthroughCasesInSwitch": true, /* Report errors for fallthrough cases in switch statement. */
     "noUnusedParameters": true, /* Report errors on unused parameters. */
     "experimentalDecorators": true, /* Add a polyfill for the Reflect API (examples below use reflect-metadata)  */
-    "emitDecoratorMetadata": true /* Add a polyfill for the Reflect API (examples below use reflect-metadata). */
+    "emitDecoratorMetadata": true, /* Add a polyfill for the Reflect API (examples below use reflect-metadata). */
+    "paths": {
+      "tslib" : ["./node_modules/tslib/tslib.d.ts"]
+    },
   },
   "include": ["./src/"],
   "exclude": ["./src/__test__"]

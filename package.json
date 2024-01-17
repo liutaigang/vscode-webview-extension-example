@@ -1,7 +1,7 @@
 {
-  "name": "vscode-webview-example",
+  "name": "vscode-webview-extension-example",
   "version": "1.0.0",
-  "description": "",
+  "description": "Vscode 的 extension webview 开发示例，提供 Vue 和 React 实现",
   "main": "index.js",
   "scripts": {
     "dev": "run-p dev:view-*",
