@@ -1,6 +1,6 @@
 # 简介
 
-Vscode 的 extension webview 开发示例，提供 Vue 和 React 实现，文档详细，举例丰富。
+Vscode 的 extension webview 开发示例，提供 Vue 和 React 实现，文档详细，举例丰富
 
 # 运行
 
