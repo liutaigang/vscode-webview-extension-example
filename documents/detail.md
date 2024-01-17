@@ -1,5 +1,3 @@
-[TOC]
-
 # 写在前面的
 
 【vscode 的 webview 开发约束】
@@ -592,7 +590,7 @@ pnpm dev
 
 脚本执行完成后，通过 F5 开启调试，开启后，尝试以下两个方式：
 
-- 点击 activitybar 上的图标：![](D:\AAAAA\self\vscode-webview-example\documents\assets\activitybar-icon.png)
+- 点击 activitybar 上的图标：![](https://raw.githubusercontent.com/liutaigang/vscode-webview-extension-example/main/documents/assets/activitybar-icon.png)
 - 键入 `ctrl+shift+p` 在指令输入框中输入：`panel-view-container.show` 
 
 >过程出现任何问题，欢迎提 issue
@@ -949,7 +947,7 @@ const onColortThemeInput = () => {
 
 **因为 vscode 的 webview 实质上是一个 iframe，其 src 的指向的是本地资源，且使用了 sandbox 的 allow-same-origin 属性，这意味着 webview 端的应用中发起的接口请求可能会受到“同源策略”的限制**，如图：
 
-<img src="D:\AAAAA\self\vscode-webview-example\documents\assets\iframe-crosss-domain.png" />
+<img src="https://raw.githubusercontent.com/liutaigang/vscode-webview-extension-example/main/documents/assets/iframe-crosss-domain.png" />
 
 所以，我们一般在 extension 端发起接口请求，然后通过通信来传递请求数据给 webview 端。下面，通过一个示例来具体看看。
 
@@ -1066,13 +1064,14 @@ https://github.com/liutaigang/vscode-webview-extension-example/blob/main/package
 
 整个示例中，我们共有三个模块：extension 一个， webview 有两个，分别为 view-vue, view-react。如图：
 
-![](D:\AAAAA\self\vscode-webview-example\documents\assets\jiagou.png)
+![](https://raw.githubusercontent.com/liutaigang/vscode-webview-extension-example/main/documents/assets/jiagou.png)
+
 
 这里，我们整体采用的是 server-client 的架构， extension 端可以类比于 server ，webview 端可以类比于 client。
 
 extension 端和 webview 端需要保持单向的依赖关系，即 **webview 端的依赖可以指向 extension 端，反之则不行**。这也是我们使用 cec-client-server 的原因。我们认为 extension 端是高于 webview 端的，类比于架构设计，低级模块依赖于高级模块，反之则不行。
 
-<img src="D:\AAAAA\self\vscode-webview-example\documents\assets\dependency.png" style="zoom:75%;" />
+<img src="https://raw.githubusercontent.com/liutaigang/vscode-webview-extension-example/main/documents/assets/dependency.png" style="zoom:75%;" />
 
 > 什么是依赖：
 >
