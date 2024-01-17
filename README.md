@@ -2,7 +2,9 @@
 
 Vscode 的 extension webview 开发示例，提供 Vue 和 React 实现，文档详细，举例丰富
 
-**插件**：该项目已发布为 vscode 插件，可搜索 vscode-webview-extension-example 获取
+# 插件
+
+该项目已发布为 vscode 插件，可搜索 vscode-webview-extension-example 获取
 
 # 运行
 
