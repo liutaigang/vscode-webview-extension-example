@@ -325,8 +325,8 @@
 
    ```
    extension
-         └── src
-               └── view-provider
+       └── src
+           └── view-provider
                ├── view-provider-abstract.ts
                ├── view-provider-panel.ts
                └── view-provider-sidebar.ts
