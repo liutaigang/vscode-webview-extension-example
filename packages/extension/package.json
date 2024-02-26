@@ -2,7 +2,7 @@
   "name": "extension",
   "displayName": "vscode-webview-extension-example",
   "description": "Vscode 的 extension webview 开发示例，提供 Vue 和 React 实现",
-  "version": "0.0.1",
+  "version": "1.0.1",
   "publisher": "liutaigang",
   "engines": {
     "vscode": "^1.84.0"

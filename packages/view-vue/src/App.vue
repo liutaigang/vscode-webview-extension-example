@@ -6,6 +6,7 @@ import { useWebviewPublicPath } from '@/hooks/use-webview-public-path'
 import { useVscColorTheme, vscColorThemeOptions } from '@/hooks/use-vsc-color-theme'
 import { useAxios } from '@/hooks/use-axios'
 import { useMessage } from './hooks/use-message'
+import { useCall } from './hooks/use-cec-client'
 
 // Webview 公共资源地址示例
 const logoUrl = useWebviewPublicPath(logPath)
@@ -27,11 +28,18 @@ const onAxiosRequestClick = async () => {
 // Webview 之间的通信演示例
 const messgeSend = ref('')
 const { message: messageRecevice, sendMessageToReact } = useMessage()
+
+const onViewReactPanelOpen = () => {
+  useCall('Command.exec', 'panel-view-container.show')
+}
 </script>
 
 <template>
   <header>
     <img alt="Vue logo" class="logo" :src="logoUrl" width="125" height="125" />
+    <div class="example-block">
+      <button @click="onViewReactPanelOpen()">打开 view-react 的 panel 窗口</button>
+    </div>
     <div class="example-block">
       <h2>主题获取、监听和设置演示</h2>
       <label for="color-theme-select">请选择 Vscode 的主题:</label>

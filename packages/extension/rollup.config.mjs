@@ -9,7 +9,7 @@ const pkg = JSON.parse(readFileSync('./package.json'))
 
 const plugins = [
     typescript({
-        tsconfig: './tsconfig.json',
+        tsconfig: './tsconfig.prod.json',
     }),
     json(),
     commonjs(),

@@ -1,0 +1,11 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "moduleResolution": "node",
+    "target": "ES2020",
+    "sourceMap": false,
+    "paths": {
+      "tslib": ["./node_modules/tslib/tslib.d.ts"]
+    }
+  },
+}
