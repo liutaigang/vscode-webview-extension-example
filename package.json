@@ -11,7 +11,12 @@
     "clear": "run-s clear:* && rm -rf ./node_modules",
     "clear:extension": "pnpm run -F extension clear",
     "clear:view-vue": "pnpm run -F view-vue clear",
-    "clear:view-react": "pnpm run -F view-react clear"
+    "clear:view-react": "pnpm run -F view-react clear",
+    "build": "run-s build:*",
+    "build:view-vue": "pnpm run -F view-vue build",
+    "build:view-react": "pnpm run -F view-react build",
+    "build:extension": "pnpm run -F extension compile",
+    "package": "pnpm run -F extension package"
   },
   "keywords": [],
   "author": "",
