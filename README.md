@@ -1,21 +1,18 @@
-```bash
-git clone git@github.com:jsonrpc-rx/jsonrpc-rx-sample-vscode-webview.git
-```
+## 使用
+- 下载代码：
+  ```
+  git clone git@github.com:liutaigang/vscode-webview-extension-example.git
+  git checkout example/jsonrpc-rx-js
+  pnpm i
+  ```
+- 按 F5 启动调试模式
+- 点击 activitybar 上的图标： ![](https://raw.githubusercontent.com/liutaigang/vscode-webview-extension-example/main/documents/assets/activitybar-icon.png)
 
-使用 vscode 打开项目，运行：
+## 源码
+[https://github.com/liutaigang/vscode-webview-extension-example/tree/example/jsonrpc-rx-js](https://github.com/liutaigang/vscode-webview-extension-example/tree/example/jsonrpc-rx-js)
+(目前主要维护分支：example/jsonrpc-rx-js，并逐步替代主分支)
 
-（如果没有安装 pnpm）
+## 动画
+![](https://raw.githubusercontent.com/liutaigang/vscode-webview-extension-example/main/documents/assets/usage-example.gif)
 
-```bash
-npm i pnpm -g
-```
 
-```	bash
-pnpm i
-pnpm dev
-```
-
-脚本执行完成后：
-
-- 按 F5 开启调试
-- 调试窗口打开后，点击 activitybar 上的图标： ![](https://raw.githubusercontent.com/liutaigang/vscode-webview-extension-example/main/documents/assets/activitybar-icon.png)
