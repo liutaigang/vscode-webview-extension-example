@@ -1,24 +1,21 @@
-import { service } from 'cec-client-server/decorator'
+export class MessageService {
+  private channelListenerMap = new Map<string, (value: any) => void>();
 
-export interface MessageSubject {
-  register(subjectMame: string, observer: (message: any) => void): void
-  send(subjectMame: string, message: any): Promise<any>
-}
-
-@service()
-export class MessageService implements MessageSubject {
-  private subjectObserverMap = new Map<string, (message: any) => void>()
-
-  register(subjectMame: string, observer: (message: any) => void) {
-    this.subjectObserverMap.set(subjectMame, observer)
+  register(channel: string, listener: (value: any) => void) {
+    this.channelListenerMap.set(channel, listener);
   }
 
-  send(subjectMame: string, message: any) {
-    if (!this.subjectObserverMap.has(subjectMame)) {
-      return Promise.reject(`The message subject: ${subjectMame} is not exist !`)
+  unregister(channel: string) {
+    this.channelListenerMap.delete(channel);
+  }
+
+  send(channel: string, value: any) {
+    if (!this.channelListenerMap.has(channel)) {
+      return Promise.reject(`The channel: ${channel} is not exist !`);
+    } else {
+      const observer = this.channelListenerMap.get(channel)!;
+      observer.call({}, value);
+      return Promise.resolve('success');
     }
-    const observer = this.subjectObserverMap.get(subjectMame)!
-    observer.call({}, message)
-    return Promise.resolve('success')
   }
 }

@@ -2,16 +2,11 @@ import { ExtensionContext, Uri, Webview, WebviewPanel, WebviewView } from 'vscod
 import { readFileSync } from 'fs'
 import { join } from 'path'
 import { modifyHtml } from 'html-modifier'
-import { CallHandler, CecServer, SubscribleHandler } from 'cec-client-server'
+import { HandlerConfig, JsonrpcServer, expose } from '@jsonrpc-rx/server'
 
 export type ViewProviderOptions = {
   distDir: string
   indexPath: string
-}
-
-export type ControllerOptions = {
-  callables: { [name: string]: CallHandler }
-  subscribables: { [name: string]: SubscribleHandler }
 }
 
 export abstract class AbstractViewProvider {
@@ -21,12 +16,12 @@ export abstract class AbstractViewProvider {
   /**
    * 构造方法
    * @param context 该插件的上下文，在插件激活时可以获取
-   * @param controllerOptions
+   * @param handlers jsonrpc-rx 中的处理逻辑的配置
    * @param wiewProviderOptions 相关配置
    */
   constructor(
     protected context: ExtensionContext,
-    protected controllerOptions: ControllerOptions,
+    protected handlers: HandlerConfig,
     protected wiewProviderOptions: ViewProviderOptions
   ) {}
 
@@ -36,18 +31,12 @@ export abstract class AbstractViewProvider {
    */
   abstract resolveWebviewView(webviewView: WebviewView | WebviewPanel): void
 
-  /**
-   * 新增一个 CecServer 实例，并设置相关的 callable 和 subscribable
-   * @param webviewView 可以为 vscode.WebviewView 或者 vscode.WebviewPanel 的实例
-   */
-  protected setControllers(webview: Webview) {
-    const cecServer = new CecServer(
+  protected exposeHandlers(webview: Webview) {
+    const jsonrpcServer = new JsonrpcServer(
       webview.postMessage.bind(webview),
       webview.onDidReceiveMessage.bind(webview)
     )
-    const { callables, subscribables } = this.controllerOptions
-    Object.entries(callables).map((item) => cecServer.onCall(...item))
-    Object.entries(subscribables).map((item) => cecServer.onSubscribe(...item))
+    expose(jsonrpcServer, this.handlers)
   }
 
   /**

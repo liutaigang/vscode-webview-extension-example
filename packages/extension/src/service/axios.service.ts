@@ -1,4 +1,3 @@
-import { service } from 'cec-client-server/decorator'
 import axios, {
   AxiosInstance,
   AxiosRequestConfig,
@@ -7,7 +6,6 @@ import axios, {
   InternalAxiosRequestConfig
 } from 'axios'
 
-@service()
 export class AxiosService
   implements Pick<AxiosInstance, 'get' | 'post' | 'put' | 'delete' | 'patch'>
 {

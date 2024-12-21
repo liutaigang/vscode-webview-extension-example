@@ -11,9 +11,6 @@ importers:
       axios:
         specifier: ^1.6.4
         version: 1.6.4
-      cec-client-server:
-        specifier: ^1.3.1
-        version: 1.3.1
       path-browserify:
         specifier: ^1.0.1
         version: 1.0.1
@@ -30,15 +27,12 @@ importers:
 
   packages/extension:
     dependencies:
+      '@jsonrpc-rx/server':
+        specifier: ^0.2.1
+        version: 0.2.1
       html-modifier:
         specifier: ^1.2.0
         version: 1.2.0
-      reflect-metadata:
-        specifier: ^0.2.1
-        version: 0.2.1
-      tsyringe:
-        specifier: ^4.8.0
-        version: 4.8.0
     devDependencies:
       '@rollup/plugin-commonjs':
         specifier: ^25.0.7
@@ -94,6 +88,9 @@ importers:
 
   packages/view-react:
     dependencies:
+      '@jsonrpc-rx/client':
+        specifier: ^0.2.2
+        version: 0.2.2
       react:
         specifier: ^18.2.0
         version: 18.2.0
@@ -125,6 +122,9 @@ importers:
       eslint-plugin-react-refresh:
         specifier: ^0.4.4
         version: 0.4.5(eslint@8.55.0)
+      extension:
+        specifier: workspace:^
+        version: link:../extension
       typescript:
         specifier: ^5.2.2
         version: 5.2.2
@@ -134,6 +134,9 @@ importers:
 
   packages/view-vue:
     dependencies:
+      '@jsonrpc-rx/client':
+        specifier: ^0.2.2
+        version: 0.2.2
       pinia:
         specifier: ^2.1.7
         version: 2.1.7(typescript@5.2.2)(vue@3.3.7)
@@ -171,6 +174,9 @@ importers:
       eslint-plugin-vue:
         specifier: ^9.17.0
         version: 9.18.1(eslint@8.52.0)
+      extension:
+        specifier: workspace:^
+        version: link:../extension
       npm-run-all2:
         specifier: ^6.1.1
         version: 6.1.1
@@ -733,6 +739,26 @@ packages:
 
   /@jridgewell/sourcemap-codec@1.4.15:
     resolution: {integrity: sha512-eF2rxCRulEKXHTRiDrDy6erMYWqNw4LPdQ8UQA4huuxaQsVeRPFl2oM8oDGxMFhJUWZf9McpLtJasDDZb/Bpeg==}
+
+  /@jsonrpc-rx/client@0.2.2:
+    resolution: {integrity: sha512-SPVc+jpTRuGMDsmlOOWyI/xw0fMakmwKRsGasgPtsvNyrKRhnjFlkbPP8EW4I+s1dkx4deqh1WD//0VuSv/Kcw==}
+    dependencies:
+      '@jsonrpc-rx/core': 0.2.1
+      flatted: 3.2.9
+    dev: false
+
+  /@jsonrpc-rx/core@0.2.1:
+    resolution: {integrity: sha512-t3Qf8OcPD2u6vzkZE21B5QC4AAPrRA05PS7Ph2MZdLDPtpQEnjfChvRD1EA2s+kuxY92bncJlcnBEYbSZDGfgw==}
+    dependencies:
+      flatted: 3.2.9
+    dev: false
+
+  /@jsonrpc-rx/server@0.2.1:
+    resolution: {integrity: sha512-A5x661/b/kE4jXJ3I77ABfH9VnqMOkK6Ui9pspompIVZ04XZWdT+4RLhcMf0eyT9/2Qax3gCLdxdJYHgf9oglg==}
+    dependencies:
+      '@jsonrpc-rx/core': 0.2.1
+      flatted: 3.2.9
+    dev: false
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -2052,20 +2078,6 @@ packages:
     resolution: {integrity: sha512-Gmy6FhYlCY7uOElZUSbxo2UCDH8owEk996gkbrpsgGtrJLM3J7jGxl9Ic7Qwwj4ivOE5AWZWRMecDdF7hqGjFA==}
     engines: {node: '>=10'}
     dev: true
-
-  /cec-client-server@1.3.1:
-    resolution: {integrity: sha512-CR3NOC+5A+ClLneMscJCBOZLd0C6DzHBz6dsf3iALLN8hutQebVaez8bVDiSMeTotuR0/LQ85c22BZlbD5gKRg==}
-    dependencies:
-      cec-core: 1.0.1
-      tsyringe: 4.8.0
-    dev: false
-
-  /cec-core@1.0.1:
-    resolution: {integrity: sha512-wLGE+bKCAim1zwzMbsJ8SQh4+Mu/948OMAZIqNXBQhABtTIWMrU3nwd8riVwwiBBEGG7y8804ElNoiY2jxxD4g==}
-    dependencies:
-      flatted: 3.2.9
-      uuid: 9.0.1
-    dev: false
 
   /chalk@2.4.2:
     resolution: {integrity: sha512-Mti+f9lpJNcwF4tWV8/OrTTtF1gZi+f8FqlyAdouralcFWFQWF2+NgCHShjkCb+IFBLq9buZwE1xckQU4peSuQ==}
@@ -4365,10 +4377,6 @@ packages:
       picomatch: 2.3.1
     dev: true
 
-  /reflect-metadata@0.2.1:
-    resolution: {integrity: sha512-i5lLI6iw9AU3Uu4szRNPPEkomnkjRTaVt9hy/bn5g/oSzekBSMeLZblcjP74AW0vBabqERLLIrz+gR8QYR54Tw==}
-    dev: false
-
   /regexp.prototype.flags@1.5.1:
     resolution: {integrity: sha512-sy6TXMN+hnP/wMy+ISxg3krXx7BAtWVO4UouuCN/ziM9UEne0euamVNafDfvC83bRNr95y0V5iijeDQFUNpvrg==}
     engines: {node: '>= 0.4'}
@@ -4865,20 +4873,9 @@ packages:
       typescript: 5.2.2
     dev: true
 
-  /tslib@1.14.1:
-    resolution: {integrity: sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==}
-    dev: false
-
   /tslib@2.6.2:
     resolution: {integrity: sha512-AEYxH93jGFPn/a2iVAwW87VuUIkR1FVUKB77NwMF7nBTDkDrrT/Hpt/IrCJ0QXhW27jTBDcf5ZY7w6RiqTMw2Q==}
     dev: true
-
-  /tsyringe@4.8.0:
-    resolution: {integrity: sha512-YB1FG+axdxADa3ncEtRnQCFq/M0lALGLxSZeVNbTU8NqhOVc51nnv2CISTcvc1kyv6EGPtXVr0v6lWeDxiijOA==}
-    engines: {node: '>= 6.0.0'}
-    dependencies:
-      tslib: 1.14.1
-    dev: false
 
   /tunnel-agent@0.6.0:
     resolution: {integrity: sha512-McnNiV1l8RYeY8tBgEpuodCC1mLUdbSN+CYBL7kJsJNInOP8UjDDEwdk6Mw60vdLLrr5NHKZhMAOSrR2NZuQ+w==}
@@ -5010,11 +5007,6 @@ packages:
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
     dev: true
-
-  /uuid@9.0.1:
-    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
-    hasBin: true
-    dev: false
 
   /validate-npm-package-license@3.0.4:
     resolution: {integrity: sha512-DpKm2Ui/xN7/HQKCtpZxoRWBhZ9Z0kqtygG8XCgNQ8ZlDnxuQmWhj566j8fN4Cu3/JmbhsDo7fcAJq4s9h27Ew==}

@@ -1,32 +1,31 @@
-import { useEffect, useState } from 'react'
-import { useCall, useSubscrible } from './use-cec-client'
+import { useEffect, useState } from 'react';
+import { useHandlers } from './use-handlers';
 
-const MY_MESSAGE_SUBJECT_NAME = 'view-react'
-const VUE_MESSAGE_SUBJECT_NAME = 'view-vue'
+const MY_MESSAGE_CHANNEL = 'view-react';
+const VUE_MESSAGE_CHANNEL = 'view-vue';
 
 export function useMessage() {
-  const addMessageListener = (listener: (msgValue: any) => void) => {
-    return useSubscrible('Message.register', listener, MY_MESSAGE_SUBJECT_NAME)
-  }
+  const handlers = useHandlers();
+  const addListener = (listener: (msgValue: any) => void) => {
+    handlers.registerChannel(MY_MESSAGE_CHANNEL, listener); 
+    return () => {
+      handlers.unregisterChannel(MY_MESSAGE_CHANNEL);
+    };
+  };
 
-  const sendMessage = (toMessageSubjectName: string, msgValue: any) => {
-    const msgBody = {
-      from: MY_MESSAGE_SUBJECT_NAME,
-      value: msgValue
-    }
-    useCall('Message.send', toMessageSubjectName, msgBody)
-  }
+  const sendMessage = (channel: string, value: any) => {
+    const msgBody = { from: MY_MESSAGE_CHANNEL, value };
+    handlers.sendMessage(channel, msgBody);
+  };
 
-  const [message, setMessage] = useState<{ from?: string; value?: any }>({})
+  const [message, setMessage] = useState<{ from?: string; value?: any }>({});
   useEffect(() => {
-    return addMessageListener((msgBody) => {
-      setMessage(msgBody)
-    })
-  }, [])
+    return addListener((msgBody) => setMessage(msgBody));
+  }, []);
 
   return {
     message,
     sendMessage,
-    sendMessageToVue: sendMessage.bind({}, VUE_MESSAGE_SUBJECT_NAME)
-  }
+    sendMessageToVue: sendMessage.bind({}, VUE_MESSAGE_CHANNEL)
+  };
 }
