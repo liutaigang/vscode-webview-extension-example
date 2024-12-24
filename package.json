@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "run-p dev:view-*",
+    "dev": "run-p dev:*",
     "dev:extension": "pnpm run -F extension watch",
     "dev:view-vue": "pnpm run -F view-vue watch",
     "dev:view-react": "pnpm run -F view-react watch",
