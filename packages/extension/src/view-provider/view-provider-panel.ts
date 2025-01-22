@@ -1,9 +1,10 @@
 import { ExtensionContext, WebviewPanel } from 'vscode'
-import { AbstractViewProvider, ControllerOptions } from './view-provider-abstract'
+import { HandlerConfig } from '@jsonrpc-rx/server'
+import { AbstractViewProvider } from './view-provider-abstract'
 
 export class ViewProviderPanel extends AbstractViewProvider {
-  constructor(context: ExtensionContext, controller: ControllerOptions) {
-    super(context, controller, {
+  constructor(context: ExtensionContext, handlers: HandlerConfig) {
+    super(context, handlers, {
       distDir: 'out/view-react',
       indexPath: 'out/view-react/index.html'
     })
@@ -15,7 +16,7 @@ export class ViewProviderPanel extends AbstractViewProvider {
       enableScripts: true,
       localResourceRoots: [this.context.extensionUri]
     }
-    this.setControllers(webview)
+    this.exposeHandlers(webview)
     webview.html = await this.getWebviewHtml(webview)
   }
 }

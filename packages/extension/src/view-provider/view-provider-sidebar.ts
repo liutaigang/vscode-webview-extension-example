@@ -1,10 +1,10 @@
 import { ExtensionContext, WebviewView, WebviewViewProvider } from 'vscode'
-import { AbstractViewProvider, ControllerOptions } from './view-provider-abstract'
-import { CecServer } from 'cec-client-server'
+import { HandlerConfig } from '@jsonrpc-rx/server'
+import { AbstractViewProvider } from './view-provider-abstract'
 
 export class ViewProviderSidebar extends AbstractViewProvider implements WebviewViewProvider {
-  constructor(context: ExtensionContext, controller: ControllerOptions) {
-    super(context, controller, {
+  constructor(context: ExtensionContext, handlers: HandlerConfig) {
+    super(context, handlers, {
       distDir: 'out/view-vue',
       indexPath: 'out/view-vue/index.html'
     })
@@ -16,7 +16,7 @@ export class ViewProviderSidebar extends AbstractViewProvider implements Webview
       enableScripts: true,
       localResourceRoots: [this.context.extensionUri]
     }
-    this.setControllers(webview)
+    this.exposeHandlers(webview)
     webview.html = await this.getWebviewHtml(webview)
   }
 }

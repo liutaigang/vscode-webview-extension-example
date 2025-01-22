@@ -1,5 +1,5 @@
-import { ref, onUnmounted} from 'vue'
-import { useCall, useSubscrible } from './use-cec-client'
+import { ref, onUnmounted } from 'vue';
+import { useHandlers } from './use-handlers';
 
 export const vscColorThemeOptions = [
   {
@@ -38,22 +38,20 @@ export const vscColorThemeOptions = [
     label: 'Red',
     value: 'Red'
   }
-]
+];
 
-export function useVscColorTheme() {
-  const colorTheme = ref<string>()
-  useCall<string>('VscTheme.getTheme').then((theme) => {
-    colorTheme.value = theme
-  })
+const handlers = useHandlers();
+export function useVscTheme() {
+  const theme = ref<string>();
 
-  const dispose = useSubscrible('VscTheme.getTheme', (theme: string) => {
-    colorTheme.value = theme
-  })
-  onUnmounted(dispose)
+  (async () => {
+    const dispose = await handlers.onThemeChange({
+      next: (newTheme: string) => (theme.value = newTheme)
+    });
+    onUnmounted(dispose);
+  })();
 
-  const setColorTheme = (colorTheme: string) => {
-    useCall('VscTheme.updateTheme', colorTheme)
-  }
+  const setTheme = (theme: string) => handlers.setTheme(theme);
 
-  return { colorTheme, setColorTheme }
+  return { theme, setTheme };
 }

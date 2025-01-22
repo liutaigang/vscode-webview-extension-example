@@ -34,9 +34,8 @@
     "package": "pnpm vsce package --no-dependencies"
   },
   "dependencies": {
-    "html-modifier": "^1.2.0",
-    "reflect-metadata": "^0.2.1",
-    "tsyringe": "^4.8.0"
+    "@jsonrpc-rx/server": "^0.2.1",
+    "html-modifier": "^1.2.0"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
