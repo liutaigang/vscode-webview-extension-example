@@ -10,5 +10,3 @@
 
 ## 动画
 ![](https://raw.githubusercontent.com/liutaigang/vscode-webview-extension-example/main/documents/assets/usage-example.gif)
-
-
