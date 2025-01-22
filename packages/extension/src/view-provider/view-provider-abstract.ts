@@ -59,8 +59,8 @@ export abstract class AbstractViewProvider {
     // 使用 html-modifier 库来处理读取的内容，主要的作用是：1、将 script、link 标签中的 src、href 的值，重新赋予正确的值，2、将上述 injectInContent 的内容插入读取的内容中
     return await modifyHtml(htmlText, {
       onopentag(name, attribs) {
-        if (name === 'script') attribs.src = join(webviewUri, attribs.src)
-        if (name === 'link') attribs.href = join(webviewUri, attribs.href)
+        if (name === 'script' && attribs.src) attribs.src = join(webviewUri, attribs.src)
+        if (name === 'link' && attribs.href) attribs.href = join(webviewUri, attribs.href)
         return { name, attribs }
       },
       oncomment(data) {

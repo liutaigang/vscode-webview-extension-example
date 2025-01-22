@@ -6,8 +6,8 @@
   "scripts": {
     "dev": "run-p dev:*",
     "dev:extension": "pnpm run -F extension watch",
-    "dev:view-vue": "pnpm run -F view-vue watch",
-    "dev:view-react": "pnpm run -F view-react watch",
+    "dev:view-vue": "pnpm run -F view-vue dev",
+    "dev:view-react": "pnpm run -F view-react dev",
     "clear": "run-s clear:* && rm -rf ./node_modules",
     "clear:extension": "pnpm run -F extension clear",
     "clear:view-vue": "pnpm run -F view-vue clear",

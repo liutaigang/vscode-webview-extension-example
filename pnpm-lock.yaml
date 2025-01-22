@@ -131,6 +131,9 @@ importers:
       vite:
         specifier: ^5.0.0
         version: 5.0.7
+      vite-plugin-vscode-webview-hmr:
+        specifier: ^0.0.1
+        version: 0.0.1(vite@5.0.7)
 
   packages/view-vue:
     dependencies:
@@ -189,6 +192,9 @@ importers:
       vite:
         specifier: ^4.4.11
         version: 4.5.0(@types/node@18.18.8)
+      vite-plugin-vscode-webview-hmr:
+        specifier: ^0.0.1
+        version: 0.0.1(vite@4.5.0)
       vue-tsc:
         specifier: ^1.8.19
         version: 1.8.22(typescript@5.2.2)
@@ -3866,6 +3872,13 @@ packages:
     dev: true
     optional: true
 
+  /node-html-parser@6.1.13:
+    resolution: {integrity: sha512-qIsTMOY4C/dAa5Q5vsobRpOOvPfC4pB61UVW2uSwZNUp0QU/jCekTal1vMmbO0DgdHeLUJpv/ARmDqErVxA3Sg==}
+    dependencies:
+      css-select: 5.1.0
+      he: 1.2.0
+    dev: true
+
   /normalize-package-data@2.5.0:
     resolution: {integrity: sha512-/5CMN3T0R4XTj4DcGaexo+roZSdSFW/0AOOTROrjxzCG1wrWXEsGbRKevjlIL+ZDE4sZlJr5ED4YW0yqmkK+eA==}
     dependencies:
@@ -5013,6 +5026,26 @@ packages:
     dependencies:
       spdx-correct: 3.2.0
       spdx-expression-parse: 3.0.1
+    dev: true
+
+  /vite-plugin-vscode-webview-hmr@0.0.1(vite@4.5.0):
+    resolution: {integrity: sha512-bGD+3gT1Eeho2X4AhXNeoAnGbXvMsMqzA70MVAgVdzoxDrEcNAVl7jHZUdXG3aOE3dEMBQvmzYLWxTntUGPYmw==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      vite: '>=2'
+    dependencies:
+      node-html-parser: 6.1.13
+      vite: 4.5.0(@types/node@18.18.8)
+    dev: true
+
+  /vite-plugin-vscode-webview-hmr@0.0.1(vite@5.0.7):
+    resolution: {integrity: sha512-bGD+3gT1Eeho2X4AhXNeoAnGbXvMsMqzA70MVAgVdzoxDrEcNAVl7jHZUdXG3aOE3dEMBQvmzYLWxTntUGPYmw==}
+    engines: {node: '>=16'}
+    peerDependencies:
+      vite: '>=2'
+    dependencies:
+      node-html-parser: 6.1.13
+      vite: 5.0.7
     dev: true
 
   /vite@4.5.0(@types/node@18.18.8):
