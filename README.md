@@ -1,7 +1,8 @@
 ## 使用
-- 下载代码：
+- 初始化
   ```
   git clone git@github.com:liutaigang/vscode-webview-extension-example.git
+  cd vscode-webview-extension-example
   pnpm i
   ```
 - 按 F5 启动调试模式
