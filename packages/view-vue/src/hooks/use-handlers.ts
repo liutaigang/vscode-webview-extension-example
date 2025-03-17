@@ -1,5 +1,5 @@
 import { JsonrpcClient, wrap, type MessageReceiver, type MessageSender } from '@jsonrpc-rx/client';
-// import { type HandlersType } from 'extension/handlers-type';
+import { type HandlersType } from 'extension/handlers-type';
 
 const vscodeApi = (window as any).acquireVsCodeApi();
 
@@ -8,5 +8,5 @@ const msgReceiver: MessageReceiver = (handler) => window.addEventListener('messa
 
 const jsonrpcClient = new JsonrpcClient(msgSender, msgReceiver);
 
-// export const useHandlers = () => wrap<HandlersType>(jsonrpcClient);
-export const useHandlers = () => wrap<any>(jsonrpcClient);
+export const useHandlers = () => wrap<HandlersType>(jsonrpcClient);
+// export const useHandlers = () => wrap<any>(jsonrpcClient);
