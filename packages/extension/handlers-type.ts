@@ -1,1 +1,1 @@
-export { HandlersType } from './src/handlers'
+export { type HandlersType } from './src/handlers'
