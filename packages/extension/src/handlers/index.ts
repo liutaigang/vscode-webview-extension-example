@@ -2,7 +2,7 @@ import { workspace, commands, type ExtensionContext, window, type TextDocument }
 import { type Publisher, asBehaviorSubject, asNotify } from '@jsonrpc-rx/server';
 import { MessageService } from '../service/message.service';
 import { Deferred } from '../util/deferred';
-import { type AxiosRequestConfig } from 'axios';
+import type { AxiosRequestConfig } from 'axios';
 import { AxiosService } from '../service/axios.service';
 
 const messageService = new MessageService();
