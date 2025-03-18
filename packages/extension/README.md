@@ -6,7 +6,7 @@
   pnpm i
   ```
 - 按 F5 启动调试模式
-- 点击 activitybar 上的图标： ![](./../../assets/activitybar-icon.png)
+- 点击 activitybar 上的图标： ![](https://github.com/liutaigang/vscode-webview-extension-example/blob/main/assets/activitybar-icon.png?raw=true)
 
 ## 动画
-![](./../../assets/usage-example.gif)
+![](https://github.com/liutaigang/vscode-webview-extension-example/blob/main/assets/usage-example.gif?raw=true)
