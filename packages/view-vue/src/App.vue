@@ -43,7 +43,7 @@ onMounted(() => {
 // 文件打开监听演示
 const fileName = ref('');
 useOnDidOpenTextDocument((file) => {
-  fileName.value = file.fileName;
+  fileName.value = file?.fileName ?? '';
 });
 </script>
 
