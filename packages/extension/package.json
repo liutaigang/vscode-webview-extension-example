@@ -35,7 +35,7 @@
   },
   "dependencies": {
     "@jsonrpc-rx/server": "^0.2.1",
-    "html-modifier": "^1.2.0"
+    "node-html-parser": "^7.0.1"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.7",
