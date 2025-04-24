@@ -10,3 +10,10 @@
 
 ## 动画
 ![](./assets/usage-example.gif)
+
+## 打包
+```bash
+pnpm build      # 构建所有项目
+pnpm package    # 打包插件
+```
+打包结果目录：packages/extension/extension-1.0.1.vsix
