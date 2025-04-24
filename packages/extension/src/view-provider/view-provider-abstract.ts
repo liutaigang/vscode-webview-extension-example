@@ -3,7 +3,6 @@ import { readFileSync } from 'fs';
 import { join } from 'path';
 import { parse as htmlParser } from 'node-html-parser';
 import { HandlerConfig, JsonrpcServer, expose } from '@jsonrpc-rx/server';
-import path = require('path');
 
 export type ViewProviderOptions = {
   distDir: string;
@@ -67,7 +66,7 @@ export abstract class AbstractViewProvider {
         for (const elem of elements) {
           const attrValue = elem.getAttribute(attr);
           if (attrValue) {
-            elem.setAttribute(attr, path.join(webviewUri, attrValue));
+            elem.setAttribute(attr, join(webviewUri, attrValue));
           }
         }
       }
