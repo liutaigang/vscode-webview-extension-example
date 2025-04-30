@@ -5,7 +5,12 @@ import vscodeWebviewHmr from 'vite-plugin-vscode-webview-hmr';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue(), (vscodeWebviewHmr as any)()],
+  plugins: [
+    vue(),
+    vscodeWebviewHmr({
+      linkDir: './src/assets',
+    }),
+  ],
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),

@@ -4,7 +4,12 @@ import vscodeWebviewHmr from 'vite-plugin-vscode-webview-hmr';
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react(), vscodeWebviewHmr()],
+  plugins: [
+    react(),
+    vscodeWebviewHmr({
+      linkDir: './src/assets',
+    }),
+  ],
   build: {
     outDir: '../extension/out/view-react',
   },
