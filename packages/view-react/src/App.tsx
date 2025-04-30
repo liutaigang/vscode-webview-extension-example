@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { joinWebviewUri } from './utils/join-webview-uri';
 import reactLogo from './assets/react.svg';
-import viteLogo from '/vite.svg';
 import './App.css';
 import { useMessage } from './hooks/use-message';
 import { useVscTheme, vscColorThemeOptions } from './hooks/use-vsc-theme';
@@ -12,7 +11,6 @@ function App() {
 
   // Webview 公共资源地址示例
   const reactLogoPath = joinWebviewUri(reactLogo);
-  const viteLogoPath = joinWebviewUri(viteLogo);
 
   // Webview 之间的通信演示例
   const [messgeSend, setMessageSend] = useState('');
@@ -40,14 +38,10 @@ function App() {
   return (
     <>
       <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogoPath} className="logo" alt="Vite logo" />
-        </a>
         <a href="https://react.dev" target="_blank">
           <img src={reactLogoPath} className="logo react" alt="React logo" />
         </a>
       </div>
-      <h1>Vite + React</h1>
       <div className="example-block">
         <h2>文件打开监听演示</h2>
         <div>最新打开的文件： {fileName}</div>
