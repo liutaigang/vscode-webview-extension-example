@@ -10,7 +10,7 @@ export class AxiosService implements Pick<AxiosInstance, 'get' | 'post' | 'put' 
     },
     onRejected: (error: any) => {
       return Promise.reject(error);
-    }
+    },
   };
   private responseInterceptor = {
     onFulfilled: (config: AxiosResponse) => {
@@ -18,7 +18,7 @@ export class AxiosService implements Pick<AxiosInstance, 'get' | 'post' | 'put' 
     },
     onRejected: (error: any) => {
       return Promise.reject(error);
-    }
+    },
   };
 
   constructor() {

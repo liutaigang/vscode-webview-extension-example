@@ -15,7 +15,7 @@ handlers.registerChannel(MY_MESSAGE_CHANNEL);
 const sendMessage = (channel: string, value: any) => {
   const msgBody: MessageType = {
     from: MY_MESSAGE_CHANNEL,
-    value
+    value,
   };
   handlers.sendMessage(channel, msgBody);
 };
@@ -51,6 +51,6 @@ export function useMessage() {
   return {
     listeningMessage,
     sendMessage,
-    sendMessageToReact: sendMessage.bind({}, REACT_MESSAGE_CHANNEL)
+    sendMessageToReact: sendMessage.bind({}, REACT_MESSAGE_CHANNEL),
   };
 }

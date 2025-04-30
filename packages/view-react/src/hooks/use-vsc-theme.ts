@@ -4,40 +4,40 @@ import { useHandlers } from './use-handlers';
 export const vscColorThemeOptions = [
   {
     label: 'Light High Contrast',
-    value: 'Default High Contrast Light'
+    value: 'Default High Contrast Light',
   },
   {
     label: 'Light (Visual Studio)',
-    value: 'Visual Studio Light'
+    value: 'Visual Studio Light',
   },
   {
     label: 'Light Modern',
-    value: 'Default Light Modern'
+    value: 'Default Light Modern',
   },
   {
     label: 'Light+',
-    value: 'Default Light+'
+    value: 'Default Light+',
   },
   {
     label: 'Dark High Contrast',
-    value: 'Default High Contrast'
+    value: 'Default High Contrast',
   },
   {
     label: 'Dark (Visual Studio)',
-    value: 'Visual Studio Dark'
+    value: 'Visual Studio Dark',
   },
   {
     label: 'Dark Modern',
-    value: 'Default Dark Modern'
+    value: 'Default Dark Modern',
   },
   {
     label: 'Dark+',
-    value: 'Default Dark+'
+    value: 'Default Dark+',
   },
   {
     label: 'Red',
-    value: 'Red'
-  }
+    value: 'Red',
+  },
 ];
 
 export function useVscTheme() {
@@ -46,7 +46,7 @@ export function useVscTheme() {
 
   useEffect(() => {
     const dispose = handlers.onThemeChange({
-      next: (newTheme: string) => setTheme(newTheme)
+      next: (newTheme: string) => setTheme(newTheme),
     });
     return () => {
       dispose.then((d) => d());

@@ -14,7 +14,7 @@ export const useOnDidOpenTextDocument = (listener: (file: FileDocument) => void)
   let dispose: Dispose;
   onMounted(async () => {
     dispose = await handlers.onDidOpenTextDocument({
-      next: listener as any
+      next: listener as any,
     });
   });
 

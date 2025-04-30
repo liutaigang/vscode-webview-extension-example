@@ -8,15 +8,15 @@ export default defineConfig({
   plugins: [vue(), (vscodeWebviewHmr as any)()],
   resolve: {
     alias: {
-      '@': fileURLToPath(new URL('./src', import.meta.url))
-    }
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+    },
   },
   build: {
     outDir: '../extension/out/view-vue',
     rollupOptions: {
       external: [
-        'extension/handlers-type' // ignore react stuff
-      ]
-    }
-  }
+        'extension/handlers-type', // ignore react stuff
+      ],
+    },
+  },
 });

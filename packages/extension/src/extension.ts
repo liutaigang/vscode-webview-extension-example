@@ -8,14 +8,14 @@ export function activate(context: ExtensionContext) {
   const viewProvidersidebar = new ViewProviderSidebar(context, handlers);
   // 注册 Sidebar
   const sidebarViewDisposable = window.registerWebviewViewProvider('sidebar-view-container', viewProvidersidebar, {
-    webviewOptions: { retainContextWhenHidden: true }
+    webviewOptions: { retainContextWhenHidden: true },
   });
 
   // 注册指令 'panel-view-container.show'，在指令被激活时，显示 panel
   const panelViewDisposable = commands.registerCommand('panel-view-container.show', () => {
     const viewProviderPanel = new ViewProviderPanel(context, handlers);
     const panel = window.createWebviewPanel('panel-view-container', 'Panel View', ViewColumn.One, {
-      retainContextWhenHidden: true
+      retainContextWhenHidden: true,
     });
     viewProviderPanel.resolveWebviewView(panel);
   });

@@ -163,7 +163,7 @@ export const getHandlers = (context: ExtensionContext) => {
     onDidOpenTextDocument: asSubject(({ next }: Publisher<TextDocument>) => {
       const disposable = workspace.onDidOpenTextDocument((file) => next(file));
       return disposable.dispose.bind(disposable);
-    })
+    }),
   };
 };
 

@@ -18,7 +18,7 @@
     "build:extension": "pnpm run -F extension compile",
     "package": "pnpm run -F extension package",
     "prettier": "prettier --write .",
-    "prepare": "husky"
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "",

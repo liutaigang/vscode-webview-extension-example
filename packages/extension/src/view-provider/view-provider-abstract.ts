@@ -24,7 +24,7 @@ export abstract class AbstractViewProvider {
   constructor(
     protected context: ExtensionContext,
     protected handlers: HandlerConfig,
-    protected wiewProviderOptions: ViewProviderOptions
+    protected wiewProviderOptions: ViewProviderOptions,
   ) {}
 
   /**
@@ -62,7 +62,7 @@ export abstract class AbstractViewProvider {
     if (!htmlText.includes(AbstractViewProvider.VSCODE_WEBVIEW_HMR_MARK)) {
       const tagToChange = [
         ['script', 'src'],
-        ['link', 'href']
+        ['link', 'href'],
       ];
       for (const [tag, attr] of tagToChange) {
         const elements = root.querySelectorAll(tag);

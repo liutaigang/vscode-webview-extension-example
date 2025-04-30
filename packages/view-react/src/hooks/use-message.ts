@@ -16,7 +16,7 @@ export const useMessage = () => {
     const sendMessage = (channel: string, value: any) => {
       const msgBody: MessageType = {
         from: MY_MESSAGE_CHANNEL,
-        value
+        value,
       };
       handlers.sendMessage(channel, msgBody);
     };
@@ -54,7 +54,7 @@ export const useMessage = () => {
     return {
       listeningMessage,
       sendMessage,
-      sendMessageToVue: sendMessage.bind({}, VUE_MESSAGE_CHANNEL)
+      sendMessageToVue: sendMessage.bind({}, VUE_MESSAGE_CHANNEL),
     };
   }, []);
 };

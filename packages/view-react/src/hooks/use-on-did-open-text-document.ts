@@ -12,7 +12,7 @@ export const useOnDidOpenTextDocument = (listener: (file: FileDocument) => void)
 
   useEffect(() => {
     const dispose = handlers.onDidOpenTextDocument({
-      next: listener as any
+      next: listener as any,
     });
     return () => {
       dispose.then((d) => d());
