@@ -6,6 +6,7 @@ export type FileDocument = {
   readonly fileName: string;
 };
 
+// 监听工作空间的某个文件的打开
 export const useOnDidOpenTextDocument = (listener: (file: FileDocument) => void) => {
   const handlers = useHandlers();
 

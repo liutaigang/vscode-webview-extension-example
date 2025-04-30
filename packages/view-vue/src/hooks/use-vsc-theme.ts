@@ -41,6 +41,7 @@ export const vscColorThemeOptions = [
 ];
 
 const handlers = useHandlers();
+
 export function useVscTheme() {
   const theme = ref<string>();
 

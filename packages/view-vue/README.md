@@ -1,46 +1,20 @@
-# view-vue
+# View-vue 的主要模块简介
 
-This template should help get you started developing with Vue 3 in Vite.
-
-## Recommended IDE Setup
-
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
-
-## Type Support for `.vue` Imports in TS
-
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
-
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
-
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
-
-## Customize configuration
-
-See [Vite Configuration Reference](https://vitejs.dev/config/).
-
-## Project Setup
-
-```sh
-npm install
+```
+view-vue/
+├── src/
+│   ├── hooks/
+│   │   ├── use-handlers.ts                     # 建立与 extension 的通讯，并提供使用 handlers（extenson 中定义的） 的能力
+│   │   ├── use-messsage.ts                     # 提供与其他 webview 通讯的能力
+│   │   ├── use-on-did-open-text-documentts     # 监控工作空间中文件的打开
+│   │   └── use-vsc-theme.ts                    # 监控和修改 vscode 的风格主题
+│   ├── utils/
+│   │   └── join-webview-uri.ts                 # 拼接 webviewUri，一般用于图片等静态资源
+│   ├── App.vue                                 # 示例的主要代码实现
+│   └── main.ts                                 # 项目入口
+└── vite.config.ts                              # 主要关注下，使用了 vite-plugin-vscode-webview-hmr 插件实现开发热更新
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
-npm run dev
 ```
 
-### Type-Check, Compile and Minify for Production
-
-```sh
-npm run build
-```
-
-### Lint with [ESLint](https://eslint.org/)
-
-```sh
-npm run lint
 ```

@@ -1,21 +1,44 @@
 export class MessageService {
-  private channelListenerMap = new Map<string, (value: any) => void>();
+  private channelListenerMap = new Map<string, Map<number, (value: any) => void>>();
+  private listenerNumber = 0;
 
-  register(channel: string, listener: (value: any) => void) {
-    this.channelListenerMap.set(channel, listener);
+  register(channel: string) {
+    if (!this.channelListenerMap.has(channel)) {
+      this.channelListenerMap.set(channel, new Map());
+    }
   }
 
   unregister(channel: string) {
-    this.channelListenerMap.delete(channel);
+    return this.channelListenerMap.delete(channel);
   }
 
-  send(channel: string, value: any) {
-    if (!this.channelListenerMap.has(channel)) {
-      return Promise.reject(`The channel: ${channel} is not exist !`);
+  sendMessage(channel: string, message: any): Promise<string | void> {
+    if (this.channelListenerMap.has(channel)) {
+      const listeners = this.channelListenerMap.get(channel)!;
+      for (const [_, listener] of listeners) {
+        listener.call({}, message);
+      }
+      return Promise.resolve();
     } else {
-      const observer = this.channelListenerMap.get(channel)!;
-      observer.call({}, value);
-      return Promise.resolve('success');
+      return Promise.resolve(`The channel: ${channel} is not exist !`);
     }
+  }
+
+  addMessageListener(channel: string, listener: (msg: any) => void): Promise<number> {
+    if (this.channelListenerMap.has(channel)) {
+      const listeners = this.channelListenerMap.get(channel)!;
+      listeners.set(++this.listenerNumber, listener);
+      return Promise.resolve(this.listenerNumber);
+    } else {
+      return Promise.reject(`The channel: ${channel} is not exist !`);
+    }
+  }
+
+  rmMessageListener(channel: string, listenerNumber: number) {
+    if (this.channelListenerMap.has(channel)) {
+      const listeners = this.channelListenerMap.get(channel)!;
+      return listeners.delete(listenerNumber);
+    }
+    return false;
   }
 }

@@ -1,16 +1,15 @@
 <script setup lang="ts">
 import { onMounted, ref } from 'vue';
-import { RouterLink, RouterView } from 'vue-router';
 import logPath from '@/assets/logo.svg';
-import { useWebviewPublicPath } from '@/hooks/use-webview-public-path';
 import { useVscTheme, vscColorThemeOptions } from '@/hooks/use-vsc-theme';
 import { useOnDidOpenTextDocument } from '@/hooks/use-on-did-open-text-document';
 import { useMessage } from '@/hooks/use-message';
 import { useHandlers } from '@/hooks/use-handlers';
+import { joinWebviewUri } from './utils/join-webview-uri';
 
 const handlers = useHandlers();
 // Webview 公共资源地址示例
-const logoUrl = useWebviewPublicPath(logPath);
+const logoUrl = joinWebviewUri(logPath);
 
 // Vscode 主题监听和设置示例
 const { theme, setTheme } = useVscTheme();
@@ -31,7 +30,13 @@ const onAxiosRequestClick = async () => {
 
 // Webview 之间的通信演示例
 const messgeSend = ref('');
-const { message: messageRecevice, sendMessageToReact } = useMessage();
+const messageRecevice = ref('');
+const messageFrom = ref('');
+const { listeningMessage, sendMessageToReact } = useMessage();
+listeningMessage((val, from) => {
+  messageRecevice.value = val;
+  messageFrom.value = from!;
+});
 
 const onViewReactPanelOpen = () => {
   handlers.execCommand('panel-view-container.show');
@@ -54,6 +59,14 @@ useOnDidOpenTextDocument((file) => {
       <button @click="onViewReactPanelOpen()">打开 view-react 的 panel 窗口</button>
     </div>
     <div class="example-block">
+      <h2>Webview 之间的通信演示</h2>
+      <label for="webview-message-input">请输入消息：</label>
+      <input type="text" id="webview-message-input" v-model="messgeSend" />
+      <button @click="sendMessageToReact(messgeSend)">发送消息</button>
+      <div>接受到的消息： {{ messageRecevice }}</div>
+      <div>发送者： {{ messageFrom }}</div>
+    </div>
+    <div class="example-block">
       <h2>主题获取、监听和设置演示</h2>
       <label for="color-theme-select">请选择 Vscode 的主题:</label>
       <select id="color-theme-select" v-model="theme" @input="onColortThemeInput()">
@@ -72,22 +85,7 @@ useOnDidOpenTextDocument((file) => {
       <button @click="onAxiosRequestClick()">请求数据</button>
       <div>数据：{{ whoami }}</div>
     </div>
-    <div class="example-block">
-      <h2>Webview 之间的通信演示</h2>
-      <label for="webview-message-input">请输入消息：</label>
-      <input type="text" id="webview-message-input" v-model="messgeSend" />
-      <button @click="sendMessageToReact(messgeSend)">发送消息</button>
-      <div>接受到的消息： {{ messageRecevice.value }}</div>
-      <div>发送者： {{ messageRecevice.from }}</div>
-    </div>
-    <div class="wrapper">
-      <nav>
-        <RouterLink to="/">Home</RouterLink>
-        <RouterLink to="/about">About</RouterLink>
-      </nav>
-    </div>
   </header>
-  <RouterView />
 </template>
 
 <style scoped>

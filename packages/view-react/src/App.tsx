@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useWebviewPublicPath } from './hooks/use-webview-public-path';
+import { useEffect, useState } from 'react';
+import { joinWebviewUri } from './utils/join-webview-uri';
 import reactLogo from './assets/react.svg';
 import viteLogo from '/vite.svg';
 import './App.css';
@@ -11,12 +11,20 @@ function App() {
   const [fileName, setFileName] = useState('');
 
   // Webview 公共资源地址示例
-  const [reactLogoPath] = useWebviewPublicPath(reactLogo);
-  const [viteLogoPath] = useWebviewPublicPath(viteLogo);
+  const reactLogoPath = joinWebviewUri(reactLogo);
+  const viteLogoPath = joinWebviewUri(viteLogo);
 
   // Webview 之间的通信演示例
-  const [messgeInput, setMessageInput] = useState('');
-  const { message: messageReceive, sendMessageToVue } = useMessage();
+  const [messgeSend, setMessageSend] = useState('');
+  const [messageReceive, setMessageReceive] = useState('');
+  const [messageFrom, setMessageFrom] = useState<string | undefined>('');
+  const { listeningMessage, sendMessageToVue } = useMessage();
+  useEffect(() => {
+    return listeningMessage((val, from) => {
+      setMessageReceive(val);
+      setMessageFrom(from);
+    });
+  });
 
   // 主题
   const [theme, setTheme] = useVscTheme();
@@ -47,17 +55,21 @@ function App() {
       <div className="example-block">
         <h2>Webview 之间的通信演示</h2>
         <label htmlFor="webview-message-input">请输入消息：</label>
-        <input type="text" id="webview-message-input" onInput={(evt) => setMessageInput(evt.currentTarget.value)} />
-        <button onClick={() => sendMessageToVue(messgeInput)}>发送消息</button>
-        <div>接受到的消息： {messageReceive.value}</div>
-        <div>发送者： {messageReceive.from}</div>
+        <input type="text" id="webview-message-input" onInput={(evt) => setMessageSend(evt.currentTarget.value)} />
+        <button onClick={() => sendMessageToVue(messgeSend)}>发送消息</button>
+        <div>接受到的消息： {messageReceive}</div>
+        <div>发送者： {messageFrom}</div>
       </div>
       <div className="example-block">
         <h2>主题获取、监听和设置演示</h2>
         <label htmlFor="color-theme-select">请选择 Vscode 的主题: </label>
         <select id="color-theme-select" value={theme} onInput={(evt) => onColortThemeInput(evt.currentTarget.value)}>
           {vscColorThemeOptions.map(({ value, label }) => {
-            return <option value={value} key={value}>{label}</option>;
+            return (
+              <option value={value} key={value}>
+                {label}
+              </option>
+            );
           })}
         </select>
       </div>

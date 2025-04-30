@@ -7,9 +7,10 @@ export type FileDocument = {
   readonly fileName: string;
 };
 
-export const useOnDidOpenTextDocument = (listener: (file: FileDocument) => void) => {
-  const handlers = useHandlers();
+const handlers = useHandlers();
 
+// 监听工作空间的某个文件的打开
+export const useOnDidOpenTextDocument = (listener: (file: FileDocument) => void) => {
   let dispose: Dispose;
   onMounted(async () => {
     dispose = await handlers.onDidOpenTextDocument({

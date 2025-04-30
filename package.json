@@ -1,5 +1,5 @@
 {
-  "name": "jsonrpc-rx-sample-vscode-webview",
+  "name": "vscode-webview-extension-example",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -16,7 +16,9 @@
     "build:view-vue": "pnpm run -F view-vue build",
     "build:view-react": "pnpm run -F view-react build",
     "build:extension": "pnpm run -F extension compile",
-    "package": "pnpm run -F extension package"
+    "package": "pnpm run -F extension package",
+    "prettier": "prettier --write .",
+    "prepare": "husky"
   },
   "keywords": [],
   "author": "",
@@ -27,7 +29,12 @@
   },
   "devDependencies": {
     "@types/path-browserify": "^1.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
     "npm-run-all": "^4.1.5",
     "rimraf": "^5.0.5"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown ."
   }
 }

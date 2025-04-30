@@ -10,8 +10,9 @@ export type ViewProviderOptions = {
 };
 
 export abstract class AbstractViewProvider {
-  // 这个是在前端应用插入代码的标识，用于在 index.html 文件适应的位置插入内容
-  static WEBVIEW_INJECT_IN_MARK = '__webview_public_path__';
+  // 在 index.html 中注入 WebviewUri 的全局变量名
+  static WEBVIEW_INJECT_IN_MARK = '__webview_uri__';
+  // 用于判断是否使用 vite 插件的一个标识
   static VSCODE_WEBVIEW_HMR_MARK = 'vite-plugin-vscode-webview-hmr';
 
   /**
@@ -32,6 +33,10 @@ export abstract class AbstractViewProvider {
    */
   abstract resolveWebviewView(webviewView: WebviewView | WebviewPanel): void;
 
+  /**
+   * “暴露” handles 给 WebView。建立 extenson 和 webview 之间的通讯
+   * @param webview WebView
+   */
   protected exposeHandlers(webview: Webview) {
     const jsonrpcServer = new JsonrpcServer(webview.postMessage.bind(webview), webview.onDidReceiveMessage.bind(webview));
     expose(jsonrpcServer, this.handlers);
@@ -44,18 +49,16 @@ export abstract class AbstractViewProvider {
    */
   protected async getWebviewHtml(webview: Webview) {
     const { distDir, indexPath } = this.wiewProviderOptions;
-    // 前端应用的打包结果所在的目录，形如：https://file%2B.vscode-resource.vscode-cdn.net/d%3A/AAAAA/self/vscode-webview-example/packages/extension/out/view-vue
-    const webviewUri = webview.asWebviewUri(Uri.joinPath(this.context.extensionUri, distDir)).toString();
-    // 需要在前端应用中插入的脚本，目的是：将上述 webviewUri 所指的目录告知前端应用，前端应用在定位资源时需要
-    const injectInContent = `<script> window.${AbstractViewProvider.WEBVIEW_INJECT_IN_MARK} = "${webviewUri}"</script>`;
+    const { extensionUri, extensionPath } = this.context;
 
-    const htmlPath = join(this.context.extensionPath, indexPath);
+    // 前端应用的打包结果所在的目录，形如：https://file%2B.vscode-resource.vscode-cdn.net/d%3A/AAAAA/self/vscode-webview-example/packages/extension/out/view-vue
+    const webviewUri = webview.asWebviewUri(Uri.joinPath(extensionUri, distDir)).toString();
+
     // 读取 index.html 文件内容
-    const htmlText = readFileSync(htmlPath, { encoding: 'utf8' }).toString();
-    
+    const htmlText = readFileSync(join(extensionPath, indexPath), { encoding: 'utf8' }).toString();
     const root = htmlParser(htmlText);
-    
-    // 主要的作用是：1、将 script、link 标签中的 src、href 的值，重新赋予正确的值，2、将上述 injectInContent 的内容插入读取的内容中
+
+    // 主要的作用是：在生产模式下（没有使用 vite-plugin-vscode-webview-hmr 插件）将 script、link 标签中的 src、href 的值，重新赋予正确的值
     if (!htmlText.includes(AbstractViewProvider.VSCODE_WEBVIEW_HMR_MARK)) {
       const tagToChange = [
         ['script', 'src'],
@@ -64,7 +67,7 @@ export abstract class AbstractViewProvider {
       for (const [tag, attr] of tagToChange) {
         const elements = root.querySelectorAll(tag);
         for (const elem of elements) {
-          const attrValue = elem.getAttribute(attr);
+          const attrValue = elem.getAttribute?.(attr);
           if (attrValue) {
             elem.setAttribute(attr, join(webviewUri, attrValue));
           }
@@ -72,8 +75,9 @@ export abstract class AbstractViewProvider {
       }
     }
 
-    const headElmement = root.querySelector('head')!;
-    headElmement.insertAdjacentHTML('afterbegin', injectInContent);
+    // 需要在前端应用中插入的脚本，目的是：将上述 webviewUri 传递给前端应用，前端应用在定位资源时需要
+    const injectScript = `<script> window.${AbstractViewProvider.WEBVIEW_INJECT_IN_MARK} = "${webviewUri}"</script>`;
+    root.querySelector('head')!.insertAdjacentHTML('afterbegin', injectScript);
 
     return root.toString();
   }
