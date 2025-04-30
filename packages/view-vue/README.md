@@ -1,4 +1,12 @@
-# View-vue 的主要模块简介
+# View-vue 模块
+
+## 简介
+
+View-vue 模块在这个示例中，作为 Sidebar 来显示，其运行在一个 iframe 下（在 vscode 视图插件开发中，一般称为 Webview）。其运行受到了诸多限制，包括但不限于：跨域问题、资源地址问题等。
+
+View-vue 模块可以与 Extension 模块通讯，通过自研的通讯框架：[jsonrpc-rx-js](https://github.com/jsonrpc-rx/jsonrpc-rx-js)，这可使得 View-vue 模块的能力得到巨大的扩展。
+
+## 详情
 
 ```
 view-vue/

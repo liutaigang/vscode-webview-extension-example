@@ -1,9 +1,17 @@
-# extension 的主要模块简介
+# extension 模块
+
+## 简介
+
+extension 模块主要的功能是：1、负责加载 Webview，2、处理 Webview 的请求。
+
+extension 运行在 vscode 的插件进程中，运行环境为 node，extension 可以使用 vscode 提供的诸多 API。
+
+## 详情
 
 ```
 extension/
 ├── src/
-│   ├── handlers/                         # 处理来自 WebView 的调用、通知和订阅
+│   ├── handlers/                         # 处理来自 WebView 的请求，包括：调用、通知和订阅
 │   ├── service/                          # 服务：给处理器提供服务
 │   │   ├── axios.service.ts              # 提供 axios 的网络请求能力
 │   │   └── message.service.ts            # 提供 Webview 之间通讯的能力
