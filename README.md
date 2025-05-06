@@ -1,8 +1,8 @@
 ## 特点
 
-- 提供 Vue、React 示例，使用 monorepo 的架构风格
-- 完善的 WebView 与 Extension 通讯方案，基于 JSON-RPC 2.0
-- WebView 开发支持支持热更新
+- 提供 **Vue、React 示例**，使用 monorepo 的架构风格
+- 完善的 WebView 与 Extension **通讯方案**，基于 JSON-RPC 2.0
+- WebView 开发支持支持**热更新**
 
 ## 使用
 
